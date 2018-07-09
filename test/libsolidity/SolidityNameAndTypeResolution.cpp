@@ -390,11 +390,11 @@ BOOST_AUTO_TEST_CASE(unsatisfied_version)
 BOOST_AUTO_TEST_CASE(returndatasize_as_variable)
 {
 	char const* text = R"(
-		contract c { function f() public { uint returndatasize; assembly { returndatasize }}}
+		contract C { function f() public pure { uint returndatasize; assembly { returndatasize() }}}
 	)";
 	vector<pair<Error::Type, std::string>> expectations(vector<pair<Error::Type, std::string>>{
 		{Error::Type::Warning, "Variable is shadowed in inline assembly by an instruction of the same name"},
-		{Error::Type::Warning, "The use of non-functional instructions is deprecated."},
+		{Error::Type::SyntaxError, "Top-level expressions are not supposed to return values"},
 		{Error::Type::DeclarationError, "Unbalanced stack"}
 	});
 	if (!dev::test::Options::get().evmVersion().supportsReturndata())
@@ -413,7 +413,7 @@ BOOST_AUTO_TEST_CASE(create2_as_variable)
 		{Error::Type::Warning, "Variable is shadowed in inline assembly by an instruction of the same name"},
 		{Error::Type::Warning, "The \"create2\" instruction is not supported by the VM version"},
 		{Error::Type::DeclarationError, "Unbalanced stack"},
-		{Error::Type::Warning, "not supposed to return values"}
+		{Error::Type::SyntaxError, "Top-level expressions are not supposed to return values (this expression returns 1 value). Use ``pop()`` or assign them."}
 	}));
 }
 

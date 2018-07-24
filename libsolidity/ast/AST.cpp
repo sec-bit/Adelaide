@@ -352,7 +352,14 @@ string FunctionDefinition::fullyQualifiedName() const
 	auto const* contract = dynamic_cast<ContractDefinition const*>(scope());
 	solAssert(contract, "Enclosing scope of function definition was not set.");
 
-	auto fname = name().empty() ? "<fallback>" : name();
+	auto fname;
+	if (isConstructor())
+		fname = "<constructor>";
+	else if (isFallback())
+		fname = "<fallback>";
+	else
+		fname = name();
+
 	return sourceUnitName() + ":" + contract->name() + "." + fname;
 }
 

@@ -71,6 +71,7 @@ Compiler Features:
 Bugfixes:
  * Tests: Fix chain parameters to make ipc tests work with newer versions of cpp-ethereum.
  * Code Generator: Fix allocation of byte arrays (zeroed out too much memory).
+ * Code Generator: Nested arrays returned by library functions were always zeroed up to version 0.4.21. The bug was fixed in version 0.4.22 by using ``pragma experimental ABIEncoderV2``. If the ``ABIEncoderV2`` is not used, the compiler issues a TypeError on the nested array returned by the library function.
  * Fix NatSpec json output for `@notice` and `@dev` tags on contract definitions.
  * References Resolver: Enforce ``storage`` as data location for mappings.
  * Type Checker: Consider fixed size arrays when checking for recursive structs.

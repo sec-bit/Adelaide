@@ -8980,6 +8980,21 @@ BOOST_AUTO_TEST_CASE(inline_assembly_function_call)
 	ABI_CHECK(callContractFunction("f()"), encodeArgs(u256(1), u256(2), u256(7)));
 }
 
+BOOST_AUTO_TEST_CASE(invalid_instruction)
+{
+	char const* sourceCode = R"(
+		contract C {
+			function f() public {
+				assembly {
+					invalid()
+				}
+			}
+		}
+	)";
+	compileAndRun(sourceCode, 0, "C");
+	ABI_CHECK(callContractFunction("f()"), encodeArgs());
+}
+
 BOOST_AUTO_TEST_CASE(inline_assembly_function_call_assignment)
 {
 	char const* sourceCode = R"(

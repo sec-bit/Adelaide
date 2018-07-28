@@ -35,6 +35,10 @@ namespace dev
 namespace solidity
 {
 
+#ifdef SECBIT
+using ScannerFromSourceNameFun = std::function<Scanner const&(std::string const&)>;
+#endif
+
 //forward declaration
 enum class DocumentationType: uint8_t;
 
@@ -58,6 +62,11 @@ private:
 	bool assemble(AssemblyStack::Language _language, AssemblyStack::Machine _targetMachine);
 
 	void outputCompilationResults();
+
+#ifdef SECBIT
+	/// Output secbit warnings to a json file.
+	void outputSECBITWarnings(ScannerFromSourceNameFun _scannerFromSourceName);
+#endif
 
 	void handleCombinedJSON();
 	void handleAst(std::string const& _argStr);

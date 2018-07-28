@@ -1,0 +1,23 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "The type of variable 'j' was inferred as uint16. This is probably not desired. Use an explicit type to silence this warning.",
+      "endcolumn" : 15,
+      "endline" : 4,
+      "file" : "test.sol",
+      "startcolumn" : 3,
+      "startline" : 4,
+      "tag" : "type-inference"
+    },
+    {
+      "desc" : "The type of variable 'i' was inferred as uint8. This is probably not desired. Use an explicit type to silence this warning.",
+      "endcolumn" : 17,
+      "endline" : 5,
+      "file" : "test.sol",
+      "startcolumn" : 8,
+      "startline" : 5,
+      "tag" : "type-inference"
+    }
+  ]
+}

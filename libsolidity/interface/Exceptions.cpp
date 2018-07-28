@@ -26,8 +26,13 @@ using namespace std;
 using namespace dev;
 using namespace dev::solidity;
 
+#ifdef SECBIT
+Error::Error(Type _type, SourceLocation const& _location, string const& _description, string const& _secbitTag):
+	m_type(_type), m_secbitTag(_secbitTag)
+#else
 Error::Error(Type _type, SourceLocation const& _location, string const& _description):
 	m_type(_type)
+#endif
 {
 	switch(m_type)
 	{
@@ -49,6 +54,11 @@ Error::Error(Type _type, SourceLocation const& _location, string const& _descrip
 	case Type::Warning:
 		m_typeName = "Warning";
 		break;
+#ifdef SECBIT
+	case Type::SECBITWarning:
+		m_typeName = "SECBITWarning";
+		break;
+#endif
 	default:
 		solAssert(false, "");
 		break;

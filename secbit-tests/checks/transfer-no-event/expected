@@ -1,0 +1,59 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
+      "endcolumn" : 3,
+      "endline" : 47,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 42,
+      "tag" : "short-addr"
+    },
+    {
+      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 47,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 42,
+      "tag" : "transfer-no-event"
+    },
+    {
+      "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
+      "endcolumn" : 3,
+      "endline" : 53,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 49,
+      "tag" : "short-addr"
+    },
+    {
+      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 53,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 49,
+      "tag" : "transfer-no-event"
+    },
+    {
+      "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
+      "endcolumn" : 3,
+      "endline" : 70,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 65,
+      "tag" : "short-addr"
+    },
+    {
+      "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
+      "endcolumn" : 3,
+      "endline" : 76,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 72,
+      "tag" : "short-addr"
+    }
+  ]
+}

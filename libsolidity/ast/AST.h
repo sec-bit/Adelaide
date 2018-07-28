@@ -46,6 +46,22 @@ namespace dev
 namespace solidity
 {
 
+#ifdef SECBIT
+// AST/Type pattern match helpers.
+template<typename TO, typename FROM> TO *as(FROM *_from)
+{
+	return dynamic_cast<TO *>(_from);
+}
+template<typename TO, typename FROM> TO const *asC(FROM const *_from)
+{
+	return dynamic_cast<TO const *>(_from);
+}
+template<typename TO, typename FROM> bool is(FROM const *_from)
+{
+	return dynamic_cast<TO const *>(_from) != nullptr;
+}
+#endif
+
 class ASTVisitor;
 class ASTConstVisitor;
 

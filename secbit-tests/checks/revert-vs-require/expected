@@ -1,0 +1,23 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Avoid using 'now' in control expression, since it could be controled by miners.",
+      "endcolumn" : 16,
+      "endline" : 8,
+      "file" : "test.sol",
+      "startcolumn" : 13,
+      "startline" : 8,
+      "tag" : "timestamp"
+    },
+    {
+      "desc" : "Calling 'require()' instead of a conditional 'revert()' could improve readability.",
+      "endcolumn" : 21,
+      "endline" : 9,
+      "file" : "test.sol",
+      "startcolumn" : 13,
+      "startline" : 9,
+      "tag" : "revert-vs-require"
+    }
+  ]
+}

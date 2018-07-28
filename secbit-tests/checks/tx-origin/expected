@@ -1,0 +1,23 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Comparing 'tx.origin' might not have the intended result.",
+      "endcolumn" : 26,
+      "endline" : 11,
+      "file" : "test.sol",
+      "startcolumn" : 17,
+      "startline" : 11,
+      "tag" : "tx-origin"
+    },
+    {
+      "desc" : "Comparing 'tx.origin' might not have the intended result.",
+      "endcolumn" : 14,
+      "endline" : 12,
+      "file" : "test.sol",
+      "startcolumn" : 5,
+      "startline" : 12,
+      "tag" : "tx-origin"
+    }
+  ]
+}

@@ -43,7 +43,11 @@ class SMTChecker: private ASTConstVisitor
 public:
 	SMTChecker(ErrorReporter& _errorReporter, ReadCallback::Callback const& _readCallback);
 
+#ifdef SECBIT
+	void analyze(SourceUnit const& _sources, bool isSECBIT = false);
+#else
 	void analyze(SourceUnit const& _sources);
+#endif
 
 private:
 	// TODO: Check that we do not have concurrent reads and writes to a variable,
@@ -94,7 +98,12 @@ private:
 		SourceLocation const& _location,
 		std::string const& _description,
 		std::string const& _additionalValueName = "",
+#ifdef SECBIT
+		smt::Expression* _additionalValue = nullptr,
+		char const* _secbitTag = nullptr
+#else
 		smt::Expression* _additionalValue = nullptr
+#endif
 	);
 	/// Checks that a boolean condition is not constant. Do not warn if the expression
 	/// is a literal constant.
@@ -171,6 +180,26 @@ private:
 	ErrorReporter& m_errorReporter;
 
 	FunctionDefinition const* m_currentFunction = nullptr;
+
+#ifdef SECBIT
+	// The conditions need to be checked for over/underflow.
+	// This will be checked at the end of a function to take
+	// the following require/asserts into consideration.
+	std::vector<
+		std::tuple<
+		smt::Expression,
+		IntegerType const*,
+		SourceLocation const *>
+		> m_valuesToCheck;
+public:
+        // Reentrance checker state.
+        enum ReentranceState { CHECK, EFFECT, INTERACT };
+private:
+	// Map from variable to reentrance state.
+	std::map<Declaration const*, std::vector<ReentranceState>> m_reentraceState;
+	// Update states and call checkCondition at CHECK-INTERACT-EFFECT.
+	bool checkAndUpdateReentranceState(Expression const* /*nullable*/_expr, ReentranceState _state);
+#endif
 };
 
 }

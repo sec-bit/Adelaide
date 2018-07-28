@@ -1,0 +1,32 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Calling 'call.value()' does not have 2300 gas limit, which could lead to reentrance attack. Consider using 'transfer()' instead.",
+      "endcolumn" : 37,
+      "endline" : 17,
+      "file" : "test.sol",
+      "startcolumn" : 7,
+      "startline" : 17,
+      "tag" : "send-vs-transfer"
+    },
+    {
+      "desc" : "Calling 'call.value()' does not have 2300 gas limit, which could lead to reentrance attack. Consider using 'transfer()' instead.",
+      "endcolumn" : 37,
+      "endline" : 27,
+      "file" : "test.sol",
+      "startcolumn" : 7,
+      "startline" : 27,
+      "tag" : "send-vs-transfer"
+    },
+    {
+      "desc" : "A sequence of check-interaction-effect could lead to reentrance attack. happens here for:\n  _amount = 0\n",
+      "endcolumn" : 24,
+      "endline" : 20,
+      "file" : "test.sol",
+      "startcolumn" : 4,
+      "startline" : 20,
+      "tag" : "reentrance"
+    }
+  ]
+}

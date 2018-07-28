@@ -1,0 +1,32 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
+      "endcolumn" : 2,
+      "endline" : 38,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 34,
+      "tag" : "no-decimals"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
+      "endcolumn" : 2,
+      "endline" : 38,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 34,
+      "tag" : "no-name"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
+      "endcolumn" : 2,
+      "endline" : 38,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 34,
+      "tag" : "no-symbol"
+    }
+  ]
+}

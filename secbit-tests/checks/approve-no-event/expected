@@ -1,0 +1,14 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "This approve function does not emit 'Approve' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 45,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 42,
+      "tag" : "approve-no-event"
+    }
+  ]
+}

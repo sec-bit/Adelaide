@@ -1,0 +1,14 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Consider using exact language version instead.",
+      "endcolumn" : 25,
+      "endline" : 1,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 1,
+      "tag" : "fix-version"
+    }
+  ]
+}

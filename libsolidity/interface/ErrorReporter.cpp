@@ -50,6 +50,22 @@ void ErrorReporter::warning(
 	error(Error::Type::Warning, _location, _description);
 }
 
+#ifdef SECBIT
+void ErrorReporter::secbitWarning(
+	SourceLocation const& _location,
+	string const& _tag,
+	string const& _description
+)
+{
+	m_errorList.push_back(
+		make_shared<Error>(
+			Error::Type::SECBITWarning,
+			_location,
+			_description,
+			_tag));
+}
+#endif
+
 void ErrorReporter::warning(
 	SourceLocation const& _location,
 	string const& _description,

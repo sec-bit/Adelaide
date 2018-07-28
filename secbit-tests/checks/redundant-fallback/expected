@@ -1,0 +1,23 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "'throw' is deprecated in favour of 'revert()', 'require()' and 'assert()'.",
+      "endcolumn" : 14,
+      "endline" : 4,
+      "file" : "test.sol",
+      "startcolumn" : 9,
+      "startline" : 4,
+      "tag" : "throw"
+    },
+    {
+      "desc" : "Fallback function with a single 'Throw' is no longer needed after version 0.4.0. Consider removing this function.",
+      "endcolumn" : 6,
+      "endline" : 5,
+      "file" : "test.sol",
+      "startcolumn" : 5,
+      "startline" : 3,
+      "tag" : "redundant-fallback"
+    }
+  ]
+}

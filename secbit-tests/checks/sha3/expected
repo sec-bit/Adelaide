@@ -1,0 +1,23 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "\"sha3\" has been deprecated in favour of \"keccak256\"",
+      "endcolumn" : 28,
+      "endline" : 7,
+      "file" : "test.sol",
+      "startcolumn" : 18,
+      "startline" : 7,
+      "tag" : "sha3"
+    },
+    {
+      "desc" : "\"sha3\" has been deprecated in favour of \"keccak256\"",
+      "endcolumn" : 36,
+      "endline" : 12,
+      "file" : "test.sol",
+      "startcolumn" : 26,
+      "startline" : 12,
+      "tag" : "sha3"
+    }
+  ]
+}

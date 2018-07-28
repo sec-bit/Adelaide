@@ -1,0 +1,14 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "'delegatecall' should be used with caution because it uses the current context.",
+      "endcolumn" : 39,
+      "endline" : 32,
+      "file" : "test.sol",
+      "startcolumn" : 8,
+      "startline" : 32,
+      "tag" : "delegatecall"
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Adding requirement on the balance of 'msg.sender' could make this function incompatible with an ERC20 'approve'.",
+      "endcolumn" : 3,
+      "endline" : 25,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 22,
+      "tag" : "approve-with-balance-verify"
+    },
+    {
+      "desc" : "This approve function does not emit 'Approve' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 25,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 22,
+      "tag" : "approve-no-event"
+    },
+    {
+      "desc" : "Adding requirement on the balance of 'msg.sender' could make this function incompatible with an ERC20 'approve'.",
+      "endcolumn" : 3,
+      "endline" : 37,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 34,
+      "tag" : "approve-with-balance-verify"
+    },
+    {
+      "desc" : "This approve function does not emit 'Approve' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 37,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 34,
+      "tag" : "approve-no-event"
+    },
+    {
+      "desc" : "Adding requirement on the balance of 'msg.sender' could make this function incompatible with an ERC20 'approve'.",
+      "endcolumn" : 3,
+      "endline" : 49,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 46,
+      "tag" : "approve-with-balance-verify"
+    },
+    {
+      "desc" : "This approve function does not emit 'Approve' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 49,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 46,
+      "tag" : "approve-no-event"
+    },
+    {
+      "desc" : "Adding requirement on the balance of 'msg.sender' could make this function incompatible with an ERC20 'approve'.",
+      "endcolumn" : 3,
+      "endline" : 61,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 58,
+      "tag" : "approve-with-balance-verify"
+    },
+    {
+      "desc" : "This approve function does not emit 'Approve' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 61,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 58,
+      "tag" : "approve-no-event"
+    },
+    {
+      "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
+      "endcolumn" : 3,
+      "endline" : 73,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 71,
+      "tag" : "erc20-return-false"
+    },
+    {
+      "desc" : "This approve function does not emit 'Approve' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 73,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 71,
+      "tag" : "approve-no-event"
+    },
+    {
+      "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
+      "endcolumn" : 3,
+      "endline" : 79,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 75,
+      "tag" : "erc20-return-false"
+    },
+    {
+      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 79,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 75,
+      "tag" : "transfer-no-event"
+    },
+    {
+      "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
+      "endcolumn" : 3,
+      "endline" : 96,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 94,
+      "tag" : "erc20-return-false"
+    },
+    {
+      "desc" : "This approve function does not emit 'Approve' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 96,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 94,
+      "tag" : "approve-no-event"
+    }
+  ]
+}

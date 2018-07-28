@@ -107,6 +107,7 @@ bool SyntaxChecker::visit(PragmaDirective const& _pragma)
 		SemVerMatchExpressionParser parser(tokens, literals);
 		auto matchExpression = parser.parse();
 		SemVerVersion currentVersion{string(VersionString)};
+#ifndef SECBIT
 		if (!matchExpression.matches(currentVersion))
 			m_errorReporter.syntaxError(
 				_pragma.location(),
@@ -114,6 +115,7 @@ bool SyntaxChecker::visit(PragmaDirective const& _pragma)
 				string(VersionString) + " - note that nightly builds are considered to be "
 				"strictly less than the released version"
 			);
+#endif
 		m_versionPragmaFound = true;
 	}
 	else
@@ -187,6 +189,13 @@ bool SyntaxChecker::visit(Throw const& _throwStatement)
 			"\"throw\" is deprecated in favour of \"revert()\", \"require()\" and \"assert()\"."
 		);
 
+#ifdef SECBIT
+	m_errorReporter.secbitWarning(
+		_throwStatement.location(),
+		"throw",
+		"'throw' is deprecated in favour of 'revert()', 'require()' and 'assert()'."
+	);
+#endif
 	return true;
 }
 

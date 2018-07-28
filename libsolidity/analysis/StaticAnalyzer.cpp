@@ -54,6 +54,9 @@ bool StaticAnalyzer::visit(FunctionDefinition const& _function)
 	const bool isInterface = m_currentContract->contractKind() == ContractDefinition::ContractKind::Interface;
 
 	if (_function.noVisibilitySpecified())
+#ifdef SECBIT
+        {
+#endif
 		m_errorReporter.warning(
 			_function.location(),
 			"No visibility specified. Defaulting to \"" +
@@ -61,6 +64,17 @@ bool StaticAnalyzer::visit(FunctionDefinition const& _function)
 			"\". " +
 			(isInterface ? "In interfaces it defaults to external." : "")
 		);
+#ifdef SECBIT
+		m_errorReporter.secbitWarning(
+			_function.location(),
+			"implicit-visibility",
+			"No visibility specified. Defaulting to '" +
+			Declaration::visibilityToString(_function.visibility()) +
+			"'. " +
+			(isInterface ? "In interfaces it defaults to external." : "")
+		);
+	}
+#endif
 	if (_function.isImplemented())
 		m_currentFunction = &_function;
 	else
@@ -169,6 +183,12 @@ bool StaticAnalyzer::visit(MemberAccess const& _memberAccess)
 		}
 		if (type->kind() == MagicType::Kind::Block && _memberAccess.memberName() == "blockhash")
 		{
+#ifdef SECBIT
+			m_errorReporter.secbitWarning(
+				_memberAccess.location(),
+				"blockhash",
+				"'block.blockhash()' has been deprecated in favor of 'blockhash()'");
+#endif
 			if (v050)
 				m_errorReporter.typeError(
 					_memberAccess.location(),

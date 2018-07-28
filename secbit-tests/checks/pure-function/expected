@@ -1,0 +1,23 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Function state mutability can be restricted to pure",
+      "endcolumn" : 6,
+      "endline" : 6,
+      "file" : "test.sol",
+      "startcolumn" : 5,
+      "startline" : 4,
+      "tag" : "pure-function"
+    },
+    {
+      "desc" : "Function state mutability can be restricted to pure",
+      "endcolumn" : 6,
+      "endline" : 9,
+      "file" : "test.sol",
+      "startcolumn" : 5,
+      "startline" : 7,
+      "tag" : "pure-function"
+    }
+  ]
+}

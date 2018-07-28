@@ -1,0 +1,14 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Private object is still publicly visible on the chain.",
+      "endcolumn" : 19,
+      "endline" : 3,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 3,
+      "tag" : "private-modifier"
+    }
+  ]
+}

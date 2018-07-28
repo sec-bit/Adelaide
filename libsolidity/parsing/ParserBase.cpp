@@ -104,6 +104,13 @@ void ParserBase::decreaseRecursionDepth()
 	m_recursionDepth--;
 }
 
+#ifdef SECBIT
+void ParserBase::secbitWarning(string const& _tag, string const& _description)
+{
+	m_errorReporter.secbitWarning(SourceLocation(position(), position(), sourceName()), _description, _tag);
+}
+#endif
+
 void ParserBase::parserError(string const& _description)
 {
 	m_errorReporter.parserError(SourceLocation(position(), endPosition(), sourceName()), _description);

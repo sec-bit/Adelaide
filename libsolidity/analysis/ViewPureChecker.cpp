@@ -166,10 +166,25 @@ void ViewPureChecker::endVisit(FunctionDefinition const& _funDef)
 		!_funDef.isFallback() &&
 		!_funDef.annotation().superFunction
 	)
+#ifdef SECBIT
+        {
+		if(m_currentBestMutability == StateMutability::View ||
+		   m_currentBestMutability == StateMutability::Pure) {
+			m_errorReporter.secbitWarning(
+				_funDef.location(),
+				m_currentBestMutability == StateMutability::View ? "view-function" : "pure-function",
+				"Function state mutability can be restricted to " +
+				stateMutabilityToString(m_currentBestMutability)
+			);
+		}
+#endif
 		m_errorReporter.warning(
 			_funDef.location(),
 			"Function state mutability can be restricted to " + stateMutabilityToString(m_currentBestMutability)
 		);
+#ifdef SECBIT
+	}
+#endif
 	m_currentFunction = nullptr;
 }
 

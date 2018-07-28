@@ -1,0 +1,32 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Calling 'send()' requires manual exception handling. Consider using 'transfer()' instead.",
+      "endcolumn" : 25,
+      "endline" : 4,
+      "file" : "test.sol",
+      "startcolumn" : 7,
+      "startline" : 4,
+      "tag" : "send-vs-transfer"
+    },
+    {
+      "desc" : "Calling 'require()' instead of a conditional 'revert()' could improve readability.",
+      "endcolumn" : 12,
+      "endline" : 5,
+      "file" : "test.sol",
+      "startcolumn" : 4,
+      "startline" : 5,
+      "tag" : "revert-vs-require"
+    },
+    {
+      "desc" : "Calling 'call.value()' does not have 2300 gas limit, which could lead to reentrance attack. Consider using 'transfer()' instead.",
+      "endcolumn" : 27,
+      "endline" : 8,
+      "file" : "test.sol",
+      "startcolumn" : 3,
+      "startline" : 8,
+      "tag" : "send-vs-transfer"
+    }
+  ]
+}

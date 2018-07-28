@@ -1,0 +1,14 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Function state mutability can be restricted to view",
+      "endcolumn" : 3,
+      "endline" : 6,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 4,
+      "tag" : "view-function"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "A condition on 'this.balance' could be circumvented because ether could be forced into a contract via 'selfdestruct'.",
+      "endcolumn" : 27,
+      "endline" : 8,
+      "file" : "test.sol",
+      "startcolumn" : 15,
+      "startline" : 8,
+      "tag" : "forced-ether"
+    }
+  ]
+}

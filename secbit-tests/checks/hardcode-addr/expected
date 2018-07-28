@@ -1,0 +1,14 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Hard-coded address should be checked.",
+      "endcolumn" : 70,
+      "endline" : 5,
+      "file" : "test.sol",
+      "startcolumn" : 28,
+      "startline" : 5,
+      "tag" : "hardcode-addr"
+    }
+  ]
+}

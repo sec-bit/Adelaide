@@ -1,0 +1,32 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "'block.blockhash()' has been deprecated in favor of 'blockhash()'",
+      "endcolumn" : 18,
+      "endline" : 5,
+      "file" : "test.sol",
+      "startcolumn" : 3,
+      "startline" : 5,
+      "tag" : "blockhash"
+    },
+    {
+      "desc" : "Return value of 'blockhash()' could be controled by miners.",
+      "endcolumn" : 36,
+      "endline" : 5,
+      "file" : "test.sol",
+      "startcolumn" : 3,
+      "startline" : 5,
+      "tag" : "blockhash"
+    },
+    {
+      "desc" : "Return value of 'blockhash()' could be controled by miners.",
+      "endcolumn" : 30,
+      "endline" : 6,
+      "file" : "test.sol",
+      "startcolumn" : 3,
+      "startline" : 6,
+      "tag" : "blockhash"
+    }
+  ]
+}

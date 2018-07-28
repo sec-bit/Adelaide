@@ -1200,6 +1200,14 @@ bool TypeChecker::visit(VariableDeclarationStatement const& _statement)
 			// Infer type from value.
 			solAssert(!var.typeName(), "");
 			var.annotation().type = valueComponentType->mobileType();
+#ifdef SECBIT
+			m_errorReporter.secbitWarning(
+				_statement.location(),
+				"type-inference",
+				"The type of variable '" + var.name() + "' was inferred as " +
+				var.annotation().type->toString(true) +
+				". This is probably not desired. Use an explicit type to silence this warning.");
+#endif
 			if (!var.annotation().type)
 			{
 				if (valueComponentType->category() == Type::Category::RationalNumber)
@@ -1719,6 +1727,13 @@ bool TypeChecker::visit(FunctionCall const& _functionCall)
 				m_errorReporter.typeError(_functionCall.location(), msg);
 			else
 				m_errorReporter.warning(_functionCall.location(), msg);
+#ifdef SECBIT
+			m_errorReporter.secbitWarning(
+				_functionCall.location(),
+				functionName->name(),
+				msg
+			);
+#endif
 		}
 	}
 	if (!m_insideEmitStatement && functionType->kind() == FunctionType::Kind::Event)
@@ -1755,6 +1770,15 @@ bool TypeChecker::visit(FunctionCall const& _functionCall)
 							literal->mobileType()->toString() +
 							". This is probably not desired. Use an explicit type to silence this warning."
 						);
+#ifdef SECBIT
+					m_errorReporter.secbitWarning(
+						arguments[i]->location(),
+						"type-inference",
+						"The type of argument '" +
+						argType->toString() + "' was inferred as " +
+						literal->mobileType()->toString() +
+						". This is probably not desired. Use an explicit type to silence this warning.");
+#endif
 				}
 			}
 		}

@@ -1,0 +1,14 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "'throw' is deprecated in favour of 'revert()', 'require()' and 'assert()'.",
+      "endcolumn" : 14,
+      "endline" : 13,
+      "file" : "test.sol",
+      "startcolumn" : 9,
+      "startline" : 13,
+      "tag" : "throw"
+    }
+  ]
+}

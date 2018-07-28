@@ -1,0 +1,32 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Consider using exact language version instead.",
+      "endcolumn" : 25,
+      "endline" : 1,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 1,
+      "tag" : "fix-version"
+    },
+    {
+      "desc" : "Calling 'call.value()' does not have 2300 gas limit, which could lead to reentrance attack. Consider using 'transfer()' instead.",
+      "endcolumn" : 37,
+      "endline" : 18,
+      "file" : "test.sol",
+      "startcolumn" : 7,
+      "startline" : 18,
+      "tag" : "send-vs-transfer"
+    },
+    {
+      "desc" : "Calling 'call.value()' does not have 2300 gas limit, which could lead to reentrance attack. Consider using 'transfer()' instead.",
+      "endcolumn" : 37,
+      "endline" : 28,
+      "file" : "test.sol",
+      "startcolumn" : 7,
+      "startline" : 28,
+      "tag" : "send-vs-transfer"
+    }
+  ]
+}

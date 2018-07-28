@@ -45,6 +45,10 @@
 #include <libsolidity/interface/Natspec.h>
 #include <libsolidity/interface/GasEstimator.h>
 
+#ifdef SECBIT
+#include <libsolidity/analysis/SECBITChecker.h>
+#endif
+
 #include <libevmasm/Exceptions.h>
 
 #include <libdevcore/SwarmHash.h>
@@ -116,7 +120,11 @@ bool CompilerStack::addSource(string const& _name, string const& _content, bool 
 	return existed;
 }
 
+#ifdef SECBIT
+bool CompilerStack::parse(bool isSECBIT)
+#else
 bool CompilerStack::parse()
+#endif
 {
 	//reset
 	if(m_stackState != SourcesSet)
@@ -124,7 +132,11 @@ bool CompilerStack::parse()
 	m_errorReporter.clear();
 	ASTNode::resetID();
 
+#ifdef SECBIT
+	if (!isSECBIT && SemVerVersion{string(VersionString)}.isPrerelease())
+#else
 	if (SemVerVersion{string(VersionString)}.isPrerelease())
+#endif
 		m_errorReporter.warning("This is a pre-release compiler version, please do not use it in production.");
 
 	vector<string> sourcesToParse;
@@ -159,7 +171,11 @@ bool CompilerStack::parse()
 		return false;
 }
 
+#ifdef SECBIT
+bool CompilerStack::analyze(bool isSECBIT, bool noSMT)
+#else
 bool CompilerStack::analyze()
+#endif
 {
 	if (m_stackState != ParsingSuccessful)
 		return false;
@@ -258,12 +274,35 @@ bool CompilerStack::analyze()
 				noErrors = false;
 		}
 
+#ifdef SECBIT
+		if (isSECBIT) {
+			// This is done after type checking to have full AST information.
+			SECBITChecker secbitChecker(m_errorReporter);
+			for (Source const* source: m_sourceOrder) {
+				secbitChecker.checkSyntax(*source->ast);
+			}
+		}
+
+		if ((noErrors || isSECBIT) && !noSMT)
+		{
+			try {
+				SMTChecker smtChecker(m_errorReporter, m_smtQuery);
+				for (Source const* source: m_sourceOrder)
+					smtChecker.analyze(*source->ast, isSECBIT);
+			} catch(FatalError const &) {
+				throw;
+			} catch(...) {
+				; // SMT checker is buggy, skip other exceptions.
+			}
+		}
+#else
 		if (noErrors)
 		{
 			SMTChecker smtChecker(m_errorReporter, m_smtQuery);
 			for (Source const* source: m_sourceOrder)
 				smtChecker.analyze(*source->ast);
 		}
+#endif
 	}
 	catch(FatalError const&)
 	{
@@ -281,10 +320,17 @@ bool CompilerStack::analyze()
 		return false;
 }
 
+#ifdef SECBIT
+bool CompilerStack::parseAndAnalyze(bool isSECBIT, bool noSMT)
+{
+	return parse(isSECBIT) && analyze(isSECBIT, noSMT);
+}
+#else
 bool CompilerStack::parseAndAnalyze()
 {
 	return parse() && analyze();
 }
+#endif
 
 bool CompilerStack::isRequestedContract(ContractDefinition const& _contract) const
 {
@@ -294,11 +340,27 @@ bool CompilerStack::isRequestedContract(ContractDefinition const& _contract) con
 		m_requestedContractNames.count(_contract.name());
 }
 
+#ifdef SECBIT
+bool CompilerStack::compile(bool isSECBIT, bool noSMT)
+#else
 bool CompilerStack::compile()
+#endif
 {
 	if (m_stackState < AnalysisSuccessful)
+#ifdef SECBIT
+		if (!parseAndAnalyze(isSECBIT, noSMT))
+#else
 		if (!parseAndAnalyze())
+#endif
 			return false;
+
+#ifdef SECBIT
+	if(isSECBIT) {
+		// Skip backend and linker.
+		m_stackState = CompilationSuccessful;
+		return true;
+	}
+#endif
 
 	map<ContractDefinition const*, eth::Assembly const*> compiledContracts;
 	for (Source const* source: m_sourceOrder)

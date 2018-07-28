@@ -60,19 +60,32 @@ public:
 		ParserError,
 		TypeError,
 		SyntaxError,
+#ifdef SECBIT
+		Warning,
+		SECBITWarning
+#else
 		Warning
+#endif
 	};
 
 	explicit Error(
 		Type _type,
 		SourceLocation const& _location = SourceLocation(),
+#ifdef SECBIT
+		std::string const& _description = std::string(),
+		std::string const& _secbitTag = std::string()
+#else
 		std::string const& _description = std::string()
+#endif
 	);
 
 	Error(Type _type, std::string const& _description, SourceLocation const& _location = SourceLocation());
 
 	Type type() const { return m_type; }
 	std::string const& typeName() const { return m_typeName; }
+#ifdef SECBIT
+	std::string const& secbitTag() const { return m_secbitTag; }
+#endif
 
 	/// helper functions
 	static Error const* containsErrorOfType(ErrorList const& _list, Error::Type _type)
@@ -88,7 +101,11 @@ public:
 	{
 		for (auto e: _list)
 		{
+#ifdef SECBIT
+			if (e->type() != Type::Warning && e->type() != Type::SECBITWarning)
+#else
 			if (e->type() != Type::Warning)
+#endif
 				return false;
 		}
 		return true;
@@ -96,6 +113,9 @@ public:
 private:
 	Type m_type;
 	std::string m_typeName;
+#ifdef SECBIT
+	std::string m_secbitTag;
+#endif
 };
 
 

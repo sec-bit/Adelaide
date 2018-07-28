@@ -1,0 +1,14 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Consider using 'bytes' to reduce gas consumption in the declaration of 'bad'.",
+      "endcolumn" : 15,
+      "endline" : 4,
+      "file" : "test.sol",
+      "startcolumn" : 5,
+      "startline" : 4,
+      "tag" : "byte-array"
+    }
+  ]
+}

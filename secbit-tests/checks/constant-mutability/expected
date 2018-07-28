@@ -1,0 +1,14 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "'constant' is deprecated. Consider using 'view' instead.",
+      "endcolumn" : 48,
+      "endline" : 5,
+      "file" : "test.sol",
+      "startcolumn" : 48,
+      "startline" : 5,
+      "tag" : "constant-mutability"
+    }
+  ]
+}

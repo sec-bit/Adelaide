@@ -1,0 +1,23 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "\"suicide\" has been deprecated in favour of \"selfdestruct\"",
+      "endcolumn" : 24,
+      "endline" : 8,
+      "file" : "test.sol",
+      "startcolumn" : 9,
+      "startline" : 8,
+      "tag" : "suicide"
+    },
+    {
+      "desc" : "Avoid using 'now' in control expression, since it could be controled by miners.",
+      "endcolumn" : 13,
+      "endline" : 7,
+      "file" : "test.sol",
+      "startcolumn" : 10,
+      "startline" : 7,
+      "tag" : "timestamp"
+    }
+  ]
+}

@@ -43,6 +43,8 @@ configure_file("${CMAKE_SOURCE_DIR}/cmake/templates/license.h.in" include/licens
 include(EthOptions)
 configure_project(TESTS)
 
+set (CMAKE_CXX_FLAGS "-DSECBIT=1 ${CMAKE_CXX_FLAGS}")
+
 add_subdirectory(libdevcore)
 add_subdirectory(libevmasm)
 add_subdirectory(libsolidity)

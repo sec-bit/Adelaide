@@ -1,0 +1,14 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Missing return statement in a function with implicit return parameter.",
+      "endcolumn" : 3,
+      "endline" : 7,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 5,
+      "tag" : "no-return"
+    }
+  ]
+}

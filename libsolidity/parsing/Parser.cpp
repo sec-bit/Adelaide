@@ -323,8 +323,19 @@ StateMutability Parser::parseStateMutability(Token::Value _token)
 	if (_token == Token::Payable)
 		stateMutability = StateMutability::Payable;
 	// FIXME: constant should be removed at the next breaking release
+#ifdef SECBIT
+	else if (_token == Token::View)
+		stateMutability = StateMutability::View;
+	else if (_token == Token::Constant) {
+		stateMutability = StateMutability::View;
+		secbitWarning("'constant' is deprecated. "
+			   "Consider using 'view' instead.",
+			   "constant-mutability");
+	}
+#else
 	else if (_token == Token::View || _token == Token::Constant)
 		stateMutability = StateMutability::View;
+#endif
 	else if (_token == Token::Pure)
 		stateMutability = StateMutability::Pure;
 	else

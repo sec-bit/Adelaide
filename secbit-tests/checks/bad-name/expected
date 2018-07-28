@@ -1,0 +1,23 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Event name 'badlyNamedEvent' should start with an upper-case character.",
+      "endcolumn" : 26,
+      "endline" : 5,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 5,
+      "tag" : "bad-name"
+    },
+    {
+      "desc" : "Function name 'BadlyNamedFunction' should start with a lower-case character.",
+      "endcolumn" : 48,
+      "endline" : 6,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 6,
+      "tag" : "bad-name"
+    }
+  ]
+}

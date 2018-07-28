@@ -1,0 +1,14 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "'msg.data' could contain dirty padding because parameter 'a' has a type of 8 bits.",
+      "endcolumn" : 32,
+      "endline" : 5,
+      "file" : "test.sol",
+      "startcolumn" : 24,
+      "startline" : 5,
+      "tag" : "dirty-padding"
+    }
+  ]
+}

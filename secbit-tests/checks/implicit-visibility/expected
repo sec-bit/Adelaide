@@ -1,0 +1,14 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "No visibility specified. Defaulting to 'public'. ",
+      "endcolumn" : 18,
+      "endline" : 3,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 3,
+      "tag" : "implicit-visibility"
+    }
+  ]
+}

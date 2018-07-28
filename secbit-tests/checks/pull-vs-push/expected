@@ -1,0 +1,23 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "This call may result in exception and make the following logic dead code. Consider using pull for ether transfer instead.",
+      "endcolumn" : 48,
+      "endline" : 11,
+      "file" : "test.sol",
+      "startcolumn" : 9,
+      "startline" : 11,
+      "tag" : "pull-vs-push"
+    },
+    {
+      "desc" : "Calling 'call.value()' does not have 2300 gas limit, which could lead to reentrance attack. Consider using 'transfer()' instead.",
+      "endcolumn" : 35,
+      "endline" : 25,
+      "file" : "test.sol",
+      "startcolumn" : 5,
+      "startline" : 25,
+      "tag" : "send-vs-transfer"
+    }
+  ]
+}

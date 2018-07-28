@@ -48,6 +48,13 @@ public:
 
 	void warning(SourceLocation const& _location, std::string const& _description);
 
+#ifdef SECBIT
+	void secbitWarning(
+		SourceLocation const& _location,
+		std::string const& _tag,
+		std::string const& _description);
+#endif
+
 	void warning(
 		SourceLocation const& _location,
 		std::string const& _description,

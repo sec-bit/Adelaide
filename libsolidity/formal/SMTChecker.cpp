@@ -38,6 +38,61 @@ using namespace std;
 using namespace dev;
 using namespace dev::solidity;
 
+#ifdef SECBIT
+bool SMTChecker::checkAndUpdateReentranceState(Expression const *_expr, ReentranceState _state)
+{
+	auto checkAndUpdate =
+		[&](vector<ReentranceState> &past) {
+			int l = past.size();
+			if(l >= 2 && past[l-2] == CHECK && past[l-1] == INTERACT && _state == EFFECT) {
+				// CHECK-INTERACT-EFFECT, call solver and report error.
+				checkCondition(
+					smt::Expression(true),
+					_expr->location(),
+					"A sequence of check-interaction-effect could lead to reentrance attack.",
+					"",
+					nullptr,
+					"reentrance");
+			} else if (l == 0 || past[l-1] != _state) {
+				// Update state
+				past.push_back(_state);
+			}
+		};
+
+	if(_expr) {
+		// Find base identifier if we have _expr
+		Identifier const* identifier = asC<Identifier>(_expr);
+		if(identifier) {
+			;
+		} else if(const auto* ia = asC<IndexAccess>(_expr)) {
+			identifier = asC<Identifier>(&(ia->baseExpression()));
+		} else if(const auto* ma = asC<MemberAccess>(_expr)) {
+			identifier = asC<Identifier>(&(ma->expression()));
+		}
+
+		if(!identifier) {
+			return false;
+		}
+
+		Declaration const *decl = identifier->annotation().referencedDeclaration;
+
+		if(!m_reentraceState.count(decl)) {
+			// First time.
+			m_reentraceState[decl].push_back(_state);
+		} else {
+			// Existing key, check state.
+			checkAndUpdate(m_reentraceState.at(decl));
+		}
+	} else {
+		// _expr is null, check/update state for all existing keys.
+		for(auto &p : m_reentraceState) {
+			checkAndUpdate(p.second);
+		}
+	}
+	return true;
+}
+#endif
+
 SMTChecker::SMTChecker(ErrorReporter& _errorReporter, ReadCallback::Callback const& _readFileCallback):
 #ifdef HAVE_Z3
 	m_interface(make_shared<smt::Z3Interface>()),
@@ -51,15 +106,30 @@ SMTChecker::SMTChecker(ErrorReporter& _errorReporter, ReadCallback::Callback con
 	(void)_readFileCallback;
 }
 
+#ifdef SECBIT
+void SMTChecker::analyze(SourceUnit const& _source, bool isSECBIT)
+{
+	m_variableUsage = make_shared<VariableUsage>(_source);
+	if (_source.annotation().experimentalFeatures.count(ExperimentalFeature::SMTChecker) || isSECBIT)
+		_source.accept(*this);
+}
+#else
 void SMTChecker::analyze(SourceUnit const& _source)
 {
 	m_variableUsage = make_shared<VariableUsage>(_source);
 	if (_source.annotation().experimentalFeatures.count(ExperimentalFeature::SMTChecker))
 		_source.accept(*this);
 }
+#endif
 
 bool SMTChecker::visit(ContractDefinition const& _contract)
 {
+#ifdef SECBIT
+	// XXX: it is probably not a good idea to report overflow/div-by-0 FPs in SafeMath.
+	if(_contract.name() == "SafeMath") {
+		return false;
+	}
+#endif
 	for (auto _var : _contract.stateVariables())
 		if (_var->type()->isValueType())
 			createVariable(*_var);
@@ -89,6 +159,10 @@ bool SMTChecker::visit(FunctionDefinition const& _function)
 	m_variables.clear();
 	m_variables.insert(m_stateVariables.begin(), m_stateVariables.end());
 	m_pathConditions.clear();
+#ifdef SECBIT
+	m_reentraceState.clear();
+	m_valuesToCheck.clear();
+#endif
 	m_loopExecutionHappened = false;
 	initializeLocalVariables(_function);
 	resetStateVariables();
@@ -97,6 +171,31 @@ bool SMTChecker::visit(FunctionDefinition const& _function)
 
 void SMTChecker::endVisit(FunctionDefinition const&)
 {
+
+#ifdef SECBIT
+	for(auto &t : m_valuesToCheck) {
+		auto value = get<0>(t);
+		auto *type = get<1>(t);
+		auto *loc = get<2>(t);
+		checkCondition(
+			(value < SymbolicIntVariable::minValue(*type)),
+			*loc,
+			"Underflow (resulting value less than " + formatNumber(type->minValue()) + ")",
+			"value",
+			&value,
+			"unchecked-math"
+		);
+		checkCondition(
+			(value > SymbolicIntVariable::maxValue(*type)),
+			*loc,
+			"Overflow (resulting value larger than " + formatNumber(type->maxValue()) + ")",
+			"value",
+			&value,
+			"unchecked-math"
+		);
+	}
+#endif
+
 	// TOOD we could check for "reachability", i.e. satisfiability here.
 	// We only handle local variables, so we clear at the beginning of the function.
 	// If we add storage variables, those should be cleared differently.
@@ -218,6 +317,10 @@ void SMTChecker::endVisit(ExpressionStatement const&)
 
 void SMTChecker::endVisit(Assignment const& _assignment)
 {
+#ifdef SECBIT
+	// Assignment considered as EFFECT.
+	checkAndUpdateReentranceState(&_assignment.leftHandSide(), EFFECT);
+#endif
 	if (_assignment.assignmentOperator() != Token::Value::Assign)
 		m_errorReporter.warning(
 			_assignment.location(),
@@ -262,6 +365,9 @@ void SMTChecker::endVisit(TupleExpression const& _tuple)
 
 void SMTChecker::checkUnderOverflow(smt::Expression _value, IntegerType const& _type, SourceLocation const& _location)
 {
+#ifdef SECBIT
+	m_valuesToCheck.push_back(make_tuple(_value, &_type, &_location));
+#else
 	checkCondition(
 		_value < SymbolicIntVariable::minValue(_type),
 		_location,
@@ -276,6 +382,7 @@ void SMTChecker::checkUnderOverflow(smt::Expression _value, IntegerType const& _
 		"value",
 		&_value
 	);
+#endif
 }
 
 void SMTChecker::endVisit(UnaryOperation const& _op)
@@ -362,6 +469,13 @@ void SMTChecker::endVisit(FunctionCall const& _funCall)
 		return;
 	}
 
+#ifdef SECBIT
+	if(is<MemberAccess>(&(_funCall.expression()))) {
+		// Call to a member, assume INTERACT.
+		// Reentrance check for all existing keys.
+		checkAndUpdateReentranceState(nullptr, INTERACT);
+	}
+#endif
 	FunctionType const& funType = dynamic_cast<FunctionType const&>(*_funCall.expression().annotation().type);
 
 	std::vector<ASTPointer<Expression const>> const args = _funCall.arguments();
@@ -379,6 +493,13 @@ void SMTChecker::endVisit(FunctionCall const& _funCall)
 		checkBooleanNotConstant(*args[0], "Condition is always $VALUE.");
 		addPathImpliedExpression(expr(*args[0]));
 	}
+#ifdef SECBIT
+	else if (funType.kind() == FunctionType::Kind::Revert)
+	{
+		solAssert(args.size() == 0, "");
+		addPathImpliedExpression(smt::Expression(false));
+	}
+#endif
 }
 
 void SMTChecker::endVisit(Identifier const& _identifier)
@@ -389,7 +510,11 @@ void SMTChecker::endVisit(Identifier const& _identifier)
 	{
 		// Will be translated as part of the node that requested the lvalue.
 	}
+#ifdef SECBIT
+	else if (SSAVariable::isSupportedType(_identifier.annotation().type->category()) && knownVariable(*decl))
+#else
 	else if (SSAVariable::isSupportedType(_identifier.annotation().type->category()))
+#endif
 		defineExpr(_identifier, currentValue(*decl));
 	else if (FunctionType const* fun = dynamic_cast<FunctionType const*>(_identifier.annotation().type.get()))
 	{
@@ -400,6 +525,11 @@ void SMTChecker::endVisit(Identifier const& _identifier)
 
 void SMTChecker::endVisit(Literal const& _literal)
 {
+#ifdef SECBIT
+	if(!_literal.annotation().type) {
+		return;
+	}
+#endif
 	Type const& type = *_literal.annotation().type;
 	if (type.category() == Type::Category::Integer || type.category() == Type::Category::RationalNumber)
 	{
@@ -462,6 +592,10 @@ void SMTChecker::arithmeticOperation(BinaryOperation const& _op)
 
 void SMTChecker::compareOperation(BinaryOperation const& _op)
 {
+#ifdef SECBIT
+	// Comparasion, update to CHECK.
+	checkAndUpdateReentranceState(&_op.leftExpression(), CHECK);
+#endif
 	solAssert(_op.annotation().commonType, "");
 	if (SSAVariable::isSupportedType(_op.annotation().commonType->category()))
 	{
@@ -541,9 +675,15 @@ void SMTChecker::assignment(Declaration const& _variable, Expression const& _val
 
 void SMTChecker::assignment(Declaration const& _variable, smt::Expression const& _value, SourceLocation const& _location)
 {
+#ifdef SECBIT
+	// Do not report unchecked-math for assignment since we should have visited rhs already.
+	(void)_location;
+
+#else
 	TypePointer type = _variable.type();
 	if (auto const* intType = dynamic_cast<IntegerType const*>(type.get()))
 		checkUnderOverflow(_value, *intType, _location);
+#endif
 	m_interface->addAssertion(newValue(_variable) == _value);
 }
 
@@ -572,7 +712,12 @@ void SMTChecker::checkCondition(
 	SourceLocation const& _location,
 	string const& _description,
 	string const& _additionalValueName,
+#ifdef SECBIT
+	smt::Expression* _additionalValue,
+	char const* _secbitTag
+#else
 	smt::Expression* _additionalValue
+#endif
 )
 {
 	m_interface->push();
@@ -631,6 +776,11 @@ void SMTChecker::checkCondition(
 		}
 		else
 			message << ".";
+#ifdef SECBIT
+		if(_secbitTag) {
+			m_errorReporter.secbitWarning(_location, _secbitTag, message.str());
+		}
+#endif
 		m_errorReporter.warning(_location, message.str() + loopComment);
 		break;
 	}

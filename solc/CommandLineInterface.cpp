@@ -117,6 +117,12 @@ static string const g_strStrictAssembly = "strict-assembly";
 static string const g_strPrettyJson = "pretty-json";
 static string const g_strVersion = "version";
 static string const g_strIgnoreMissingFiles = "ignore-missing";
+#ifdef SECBIT
+static string const g_strSECBITWarnings = "secbit-warnings";
+static string const g_strNoSMT = "no-smt";
+static string const g_strERC20 = "erc20";
+static string const g_strSECBITTag = "secbit-tag";
+#endif
 
 static string const g_argAbi = g_strAbi;
 static string const g_argPrettyJson = g_strPrettyJson;
@@ -154,6 +160,12 @@ static string const g_argStrictAssembly = g_strStrictAssembly;
 static string const g_argVersion = g_strVersion;
 static string const g_stdinFileName = g_stdinFileNameStr;
 static string const g_argIgnoreMissingFiles = g_strIgnoreMissingFiles;
+#ifdef SECBIT
+static string const g_argSECBITWarnings = g_strSECBITWarnings;
+static string const g_argNoSMT = g_strNoSMT;
+static string const g_argERC20 = g_strERC20;
+static string const g_argSECBITTag = g_strSECBITTag;
+#endif
 
 /// Possible arguments to for --combined-json
 static set<string> const g_combinedJsonArgs
@@ -221,7 +233,13 @@ static bool needsHumanTargetedStdout(po::variables_map const& _args)
 		g_argNatspecUser,
 		g_argNatspecDev,
 		g_argOpcodes,
+#ifdef SECBIT
+		g_argSignatureHashes,
+		g_argSECBITWarnings,
+		g_argSECBITTag
+#else
 		g_argSignatureHashes
+#endif
 	})
 		if (_args.count(arg))
 			return true;
@@ -554,6 +572,20 @@ Allowed options)",
 	desc.add_options()
 		(g_argHelp.c_str(), "Show help message and exit.")
 		(g_argVersion.c_str(), "Show version and exit.")
+#ifdef SECBIT
+		(
+			g_argSECBITWarnings.c_str(),
+			po::value<string>()->value_name("file"),
+			"Print secbit warnings."
+		)
+		(g_strERC20.c_str(), "Only report ERC20 issues.")
+		(g_strNoSMT.c_str(), "Do not run SMTChecker.")
+		(
+			g_argSECBITTag.c_str(),
+			po::value<vector<string>>()->value_name("tag"),
+			"Only print warnings for tag. Multiple tags could be specified."
+		)
+#endif
 		(g_strLicense.c_str(), "Show licensing information and exit.")
 		(
 			g_strEVMVersion.c_str(),
@@ -693,6 +725,74 @@ Allowed options)",
 
 	return true;
 }
+
+#ifdef SECBIT
+void CommandLineInterface::outputSECBITWarnings(
+	ScannerFromSourceNameFun _scannerFromSourceName)
+{
+	set<string> filter;
+	if(m_args.count(g_argERC20)) {
+		filter.insert("erc20-no-decimals");
+		filter.insert("erc20-no-name");
+		filter.insert("erc20-no-symbol");
+		filter.insert("erc20-no-return");
+		filter.insert("erc20-return-false");
+		filter.insert("short-addr");
+		filter.insert("transferfrom-no-allowed-check");
+		filter.insert("transfer-no-revert");
+		filter.insert("transfer-no-event");
+		filter.insert("approve-with-balance-verify");
+		filter.insert("approve-no-event");
+	}
+	if(m_args.count(g_argSECBITTag)) {
+		for(const auto &s : m_args.at(g_argSECBITTag).as<vector<string>>()) {
+			filter.insert(s);
+		}
+	}
+
+	Json::Value output(Json::objectValue);
+
+	output[g_strSECBITWarnings] = Json::Value(Json::arrayValue);
+
+	for (auto const& error: m_compiler->errors()) {
+		if(error->type() != Error::Type::SECBITWarning ||
+		   (!filter.empty() && !filter.count(error->secbitTag()))) {
+			continue;
+		}
+
+		Json::Value err(Json::objectValue);
+		err["tag"] = error->secbitTag();
+
+		SourceLocation const* location = boost::get_error_info<errinfo_sourceLocation>(*error);
+		if (location && location->sourceName) {
+			auto const& scanner = _scannerFromSourceName(*location->sourceName);
+			int startLine;
+			int startColumn;
+			int endLine;
+			int endColumn;
+			tie(startLine, startColumn) = scanner.translatePositionToLineColumn(location->start);
+			tie(endLine, endColumn) = scanner.translatePositionToLineColumn(location->end);
+			err["file"] = *location->sourceName;
+			err["startline"] = startLine + 1;
+			err["startcolumn"] = startColumn + 1;
+			err["endline"] = endLine + 1;
+			err["endcolumn"] = endColumn + 1;
+		}
+		if (string const* description = boost::get_error_info<errinfo_comment>(*error)) {
+			err["desc"] =  *description;
+		}
+		output[g_strSECBITWarnings].append(err);
+	}
+
+	string json = dev::jsonPrettyPrint(output);
+
+	if (m_args.count(g_argOutputDir)) {
+		createFile(m_args.at(g_argSECBITWarnings).as<string>(), json);
+	} else {
+		cout << json << endl;
+	}
+}
+#endif
 
 bool CommandLineInterface::processInput()
 {
@@ -835,13 +935,48 @@ bool CommandLineInterface::processInput()
 		unsigned runs = m_args[g_argOptimizeRuns].as<unsigned>();
 		m_compiler->setOptimiserSettings(optimize, runs);
 
-		bool successful = m_compiler->compile();
+#ifdef SECBIT
+		// Do not turn on SMT if --no-smt or --secbit-tag where tag is not SMT related.
+		bool noSMT = m_args.count(g_argNoSMT);
+		if(!noSMT && (m_args.count(g_argSECBITTag) || m_args.count(g_argERC20))) {
+			noSMT = true;
+			if(m_args.count(g_argSECBITTag)) {
+				for(const auto& s: m_args.at(g_argSECBITTag).as<vector<string>>()) {
+					if(s == "unchecked-math" || s == "reentrance") {
+						noSMT = false;
+						break;
+					}
+				}
+			}
+		}
+		bool successful = m_compiler->compile(m_args.count(g_argSECBITWarnings), noSMT);
 
+		// Output secbit warnings.
+		bool isSECBIT = m_args.count(g_argSECBITWarnings);
+		if(isSECBIT) {
+			outputSECBITWarnings(scannerFromSourceName);
+		}
+		for (auto const& error: m_compiler->errors()) {
+			   // Skip secbit warnings in std output.
+			if(error->type() == Error::Type::SECBITWarning
+			   ||
+			   // Skip compiler warnings in secbit output.
+			   (isSECBIT && error->type() == Error::Type::Warning)) {
+				continue;
+			}
+			formatter.printExceptionInformation(
+				*error,
+				(error->type() == Error::Type::Warning) ? "Warning" : "Error"
+			);
+		}
+#else
+		bool successful = m_compiler->compile();
 		for (auto const& error: m_compiler->errors())
 			formatter.printExceptionInformation(
 				*error,
 				(error->type() == Error::Type::Warning) ? "Warning" : "Error"
 			);
+#endif
 
 		if (!successful)
 			return false;

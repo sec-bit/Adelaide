@@ -140,20 +140,35 @@ public:
 
 	/// Parses all source units that were added
 	/// @returns false on error.
+#ifdef SECBIT
+	bool parse(bool isSECBIT = false);
+#else
 	bool parse();
+#endif
 
 	/// Performs the analysis steps (imports, scopesetting, syntaxCheck, referenceResolving,
 	///  typechecking, staticAnalysis) on previously parsed sources.
 	/// @returns false on error.
+#ifdef SECBIT
+	bool analyze(bool isSECBIT = false, bool noSMT = false);
+#else
 	bool analyze();
-
+#endif
 	/// Parses and analyzes all source units that were added
 	/// @returns false on error.
+#ifdef SECBIT
+	bool parseAndAnalyze(bool isSECBIT = false, bool noSMT=false);
+#else
 	bool parseAndAnalyze();
+#endif
 
 	/// Compiles the source units that were previously added and parsed.
 	/// @returns false on error.
+#ifdef SECBIT
+	bool compile(bool isSECBIT = false, bool noSMT=false);
+#else
 	bool compile();
+#endif
 
 	/// @returns the list of sources (paths) used
 	std::vector<std::string> sourceNames() const;

@@ -511,7 +511,7 @@ void SMTChecker::endVisit(Identifier const& _identifier)
 		// Will be translated as part of the node that requested the lvalue.
 	}
 #ifdef SECBIT
-	else if (SSAVariable::isSupportedType(_identifier.annotation().type->category()) && knownVariable(*decl))
+	else if (_identifier.annotation().type && SSAVariable::isSupportedType(_identifier.annotation().type->category()) && knownVariable(*decl))
 #else
 	else if (SSAVariable::isSupportedType(_identifier.annotation().type->category()))
 #endif

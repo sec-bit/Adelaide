@@ -4,6 +4,9 @@ This repository is forked from the [Solidity Compiler](https://github.com/ethere
 
 The purpose is to extend the Solidity Compiler `solc` with additional static analysis capabilities.
 
+The list of currently supported checks could be find at:
+https://github.com/sec-bit/vscode-secbit-ssae#currently-supported-checks
+
 ## Build
 
 Please follow the same instruction for building Solidity compiler to build the SECBIT-extended `solc`.
@@ -70,7 +73,7 @@ SECBIT Labs also provides an [Visual Studio Code](https://code.visualstudio.com/
 Solidity Static Analysis over Solidity source code in the IDE.
 
 The extension could be find at:
-https://github.com/ethereum/vscode-secbit-sa
+https://github.com/sec-bit/vscode-secbit-ssae
 
 
 ## Modifications

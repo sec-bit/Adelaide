@@ -606,7 +606,11 @@ bool Parser::isValidNumberLiteral(string const& _literal)
 {
 	try
 	{
+#ifdef SECBIT
+		(void)u256(_literal);
+#else
 		u256(_literal);
+#endif
 	}
 	catch (...)
 	{

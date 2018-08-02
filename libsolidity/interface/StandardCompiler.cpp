@@ -117,7 +117,11 @@ bool hashMatchesContent(string const& _hash, string const& _content)
 	{
 		return dev::h256(_hash) == dev::keccak256(_content);
 	}
+#ifdef SECBIT
+	catch (dev::BadHexCharacter const&)
+#else
 	catch (dev::BadHexCharacter)
+#endif
 	{
 		return false;
 	}
@@ -366,7 +370,11 @@ Json::Value StandardCompiler::compileInternal(Json::Value const& _input)
 				// @TODO use libraries only for the given source
 				libraries[library] = h160(address);
 			}
+#ifdef SECBIT
+			catch (dev::BadHexCharacter const&)
+#else
 			catch (dev::BadHexCharacter)
+#endif
 			{
 				return formatFatalError(
 					"JSONError",

@@ -31,46 +31,352 @@
     {
       "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
       "endcolumn" : 3,
-      "endline" : 59,
+      "endline" : 95,
       "file" : "test.sol",
       "startcolumn" : 2,
-      "startline" : 57,
+      "startline" : 93,
       "tag" : "erc20-return-false"
     },
     {
       "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
       "endcolumn" : 3,
-      "endline" : 59,
+      "endline" : 95,
       "file" : "test.sol",
       "startcolumn" : 2,
-      "startline" : 57,
+      "startline" : 93,
       "tag" : "short-addr"
     },
     {
       "desc" : "No revert inside a transfer function, which is incompatible with an ERC20.",
       "endcolumn" : 3,
-      "endline" : 59,
+      "endline" : 95,
       "file" : "test.sol",
       "startcolumn" : 2,
-      "startline" : 57,
+      "startline" : 93,
       "tag" : "transfer-no-revert"
     },
     {
       "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
       "endcolumn" : 3,
-      "endline" : 59,
+      "endline" : 95,
       "file" : "test.sol",
       "startcolumn" : 2,
-      "startline" : 57,
+      "startline" : 93,
       "tag" : "transfer-no-event"
     },
     {
       "desc" : "This approve function does not emit 'Approve' event, which is incompatible with an ERC20.",
       "endcolumn" : 3,
-      "endline" : 64,
+      "endline" : 100,
       "file" : "test.sol",
       "startcolumn" : 2,
-      "startline" : 61,
+      "startline" : 97,
+      "tag" : "approve-no-event"
+    },
+    {
+      "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
+      "endcolumn" : 3,
+      "endline" : 109,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 107,
+      "tag" : "erc20-return-false"
+    },
+    {
+      "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
+      "endcolumn" : 3,
+      "endline" : 109,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 107,
+      "tag" : "short-addr"
+    },
+    {
+      "desc" : "No revert inside a transfer function, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 109,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 107,
+      "tag" : "transfer-no-revert"
+    },
+    {
+      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 109,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 107,
+      "tag" : "transfer-no-event"
+    },
+    {
+      "desc" : "This approve function does not emit 'Approve' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 114,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 111,
+      "tag" : "approve-no-event"
+    },
+    {
+      "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
+      "endcolumn" : 3,
+      "endline" : 123,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 121,
+      "tag" : "erc20-return-false"
+    },
+    {
+      "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
+      "endcolumn" : 3,
+      "endline" : 123,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 121,
+      "tag" : "short-addr"
+    },
+    {
+      "desc" : "No revert inside a transfer function, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 123,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 121,
+      "tag" : "transfer-no-revert"
+    },
+    {
+      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 123,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 121,
+      "tag" : "transfer-no-event"
+    },
+    {
+      "desc" : "This approve function does not emit 'Approve' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 128,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 125,
+      "tag" : "approve-no-event"
+    },
+    {
+      "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
+      "endcolumn" : 3,
+      "endline" : 137,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 135,
+      "tag" : "erc20-return-false"
+    },
+    {
+      "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
+      "endcolumn" : 3,
+      "endline" : 137,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 135,
+      "tag" : "short-addr"
+    },
+    {
+      "desc" : "No revert inside a transfer function, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 137,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 135,
+      "tag" : "transfer-no-revert"
+    },
+    {
+      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 137,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 135,
+      "tag" : "transfer-no-event"
+    },
+    {
+      "desc" : "This approve function does not emit 'Approve' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 142,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 139,
+      "tag" : "approve-no-event"
+    },
+    {
+      "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
+      "endcolumn" : 3,
+      "endline" : 151,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 149,
+      "tag" : "erc20-return-false"
+    },
+    {
+      "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
+      "endcolumn" : 3,
+      "endline" : 151,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 149,
+      "tag" : "short-addr"
+    },
+    {
+      "desc" : "No revert inside a transfer function, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 151,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 149,
+      "tag" : "transfer-no-revert"
+    },
+    {
+      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 151,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 149,
+      "tag" : "transfer-no-event"
+    },
+    {
+      "desc" : "This approve function does not emit 'Approve' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 156,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 153,
+      "tag" : "approve-no-event"
+    },
+    {
+      "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
+      "endcolumn" : 3,
+      "endline" : 166,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 164,
+      "tag" : "erc20-return-false"
+    },
+    {
+      "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
+      "endcolumn" : 3,
+      "endline" : 166,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 164,
+      "tag" : "short-addr"
+    },
+    {
+      "desc" : "No revert inside a transfer function, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 166,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 164,
+      "tag" : "transfer-no-revert"
+    },
+    {
+      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 166,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 164,
+      "tag" : "transfer-no-event"
+    },
+    {
+      "desc" : "This approve function does not emit 'Approve' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 171,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 168,
+      "tag" : "approve-no-event"
+    },
+    {
+      "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
+      "endcolumn" : 3,
+      "endline" : 181,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 179,
+      "tag" : "erc20-return-false"
+    },
+    {
+      "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
+      "endcolumn" : 3,
+      "endline" : 181,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 179,
+      "tag" : "short-addr"
+    },
+    {
+      "desc" : "No revert inside a transfer function, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 181,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 179,
+      "tag" : "transfer-no-revert"
+    },
+    {
+      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 181,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 179,
+      "tag" : "transfer-no-event"
+    },
+    {
+      "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
+      "endcolumn" : 3,
+      "endline" : 184,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 182,
+      "tag" : "erc20-return-false"
+    },
+    {
+      "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
+      "endcolumn" : 3,
+      "endline" : 184,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 182,
+      "tag" : "short-addr"
+    },
+    {
+      "desc" : "No revert inside a transfer function, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 184,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 182,
+      "tag" : "transfer-no-revert"
+    },
+    {
+      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 184,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 182,
+      "tag" : "transfer-no-event"
+    },
+    {
+      "desc" : "This approve function does not emit 'Approve' event, which is incompatible with an ERC20.",
+      "endcolumn" : 3,
+      "endline" : 188,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 185,
       "tag" : "approve-no-event"
     }
   ]

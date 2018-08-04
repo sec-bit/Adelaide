@@ -141,7 +141,7 @@ public:
 	/// Parses all source units that were added
 	/// @returns false on error.
 #ifdef SECBIT
-	bool parse(bool isSECBIT = false);
+	bool parse(bool _isSECBIT = false);
 #else
 	bool parse();
 #endif
@@ -150,14 +150,14 @@ public:
 	///  typechecking, staticAnalysis) on previously parsed sources.
 	/// @returns false on error.
 #ifdef SECBIT
-	bool analyze(bool isSECBIT = false, bool noSMT = false);
+	bool analyze(bool _isSECBIT = false, bool _noSMT = false, bool _asERC20 = false);
 #else
 	bool analyze();
 #endif
 	/// Parses and analyzes all source units that were added
 	/// @returns false on error.
 #ifdef SECBIT
-	bool parseAndAnalyze(bool isSECBIT = false, bool noSMT=false);
+	bool parseAndAnalyze(bool _isSECBIT = false, bool _noSMT = false, bool _asERC20 = false);
 #else
 	bool parseAndAnalyze();
 #endif
@@ -165,7 +165,7 @@ public:
 	/// Compiles the source units that were previously added and parsed.
 	/// @returns false on error.
 #ifdef SECBIT
-	bool compile(bool isSECBIT = false, bool noSMT=false);
+	bool compile(bool _isSECBIT = false, bool _noSMT = false, bool _asERC20 = false);
 #else
 	bool compile();
 #endif

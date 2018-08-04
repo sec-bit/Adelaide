@@ -938,7 +938,8 @@ bool CommandLineInterface::processInput()
 #ifdef SECBIT
 		// Do not turn on SMT if --no-smt or --secbit-tag where tag is not SMT related.
 		bool noSMT = m_args.count(g_argNoSMT);
-		if(!noSMT && (m_args.count(g_argSECBITTag) || m_args.count(g_argERC20))) {
+		bool asERC20 = m_args.count(g_argERC20);
+		if(!noSMT && (m_args.count(g_argSECBITTag) || asERC20)) {
 			noSMT = true;
 			if(m_args.count(g_argSECBITTag)) {
 				for(const auto& s: m_args.at(g_argSECBITTag).as<vector<string>>()) {
@@ -949,7 +950,7 @@ bool CommandLineInterface::processInput()
 				}
 			}
 		}
-		bool successful = m_compiler->compile(m_args.count(g_argSECBITWarnings), noSMT);
+		bool successful = m_compiler->compile(m_args.count(g_argSECBITWarnings), noSMT, asERC20);
 
 		// Output secbit warnings.
 		bool isSECBIT = m_args.count(g_argSECBITWarnings);

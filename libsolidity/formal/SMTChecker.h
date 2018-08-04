@@ -44,7 +44,7 @@ public:
 	SMTChecker(ErrorReporter& _errorReporter, ReadCallback::Callback const& _readCallback);
 
 #ifdef SECBIT
-	void analyze(SourceUnit const& _sources, bool isSECBIT = false);
+	void analyze(SourceUnit const& _sources, bool _isSECBIT = false);
 #else
 	void analyze(SourceUnit const& _sources);
 #endif

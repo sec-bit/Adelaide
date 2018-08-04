@@ -121,7 +121,7 @@ bool CompilerStack::addSource(string const& _name, string const& _content, bool 
 }
 
 #ifdef SECBIT
-bool CompilerStack::parse(bool isSECBIT)
+bool CompilerStack::parse(bool _isSECBIT)
 #else
 bool CompilerStack::parse()
 #endif
@@ -133,7 +133,7 @@ bool CompilerStack::parse()
 	ASTNode::resetID();
 
 #ifdef SECBIT
-	if (!isSECBIT && SemVerVersion{string(VersionString)}.isPrerelease())
+	if (!_isSECBIT && SemVerVersion{string(VersionString)}.isPrerelease())
 #else
 	if (SemVerVersion{string(VersionString)}.isPrerelease())
 #endif
@@ -172,7 +172,7 @@ bool CompilerStack::parse()
 }
 
 #ifdef SECBIT
-bool CompilerStack::analyze(bool isSECBIT, bool noSMT)
+bool CompilerStack::analyze(bool _isSECBIT, bool _noSMT, bool _asERC20)
 #else
 bool CompilerStack::analyze()
 #endif
@@ -275,20 +275,20 @@ bool CompilerStack::analyze()
 		}
 
 #ifdef SECBIT
-		if (isSECBIT) {
+		if (_isSECBIT) {
 			// This is done after type checking to have full AST information.
-			SECBITChecker secbitChecker(m_errorReporter);
+			SECBITChecker secbitChecker(m_errorReporter, _asERC20);
 			for (Source const* source: m_sourceOrder) {
 				secbitChecker.checkSyntax(*source->ast);
 			}
 		}
 
-		if ((noErrors || isSECBIT) && !noSMT)
+		if ((noErrors || _isSECBIT) && !_noSMT)
 		{
 			try {
 				SMTChecker smtChecker(m_errorReporter, m_smtQuery);
 				for (Source const* source: m_sourceOrder)
-					smtChecker.analyze(*source->ast, isSECBIT);
+					smtChecker.analyze(*source->ast, _isSECBIT);
 			} catch(FatalError const &) {
 				throw;
 			} catch(...) {
@@ -321,9 +321,9 @@ bool CompilerStack::analyze()
 }
 
 #ifdef SECBIT
-bool CompilerStack::parseAndAnalyze(bool isSECBIT, bool noSMT)
+bool CompilerStack::parseAndAnalyze(bool _isSECBIT, bool _noSMT, bool _asERC20)
 {
-	return parse(isSECBIT) && analyze(isSECBIT, noSMT);
+	return parse(_isSECBIT) && analyze(_isSECBIT, _noSMT, _asERC20);
 }
 #else
 bool CompilerStack::parseAndAnalyze()
@@ -341,21 +341,21 @@ bool CompilerStack::isRequestedContract(ContractDefinition const& _contract) con
 }
 
 #ifdef SECBIT
-bool CompilerStack::compile(bool isSECBIT, bool noSMT)
+bool CompilerStack::compile(bool _isSECBIT, bool _noSMT, bool _asERC20)
 #else
 bool CompilerStack::compile()
 #endif
 {
 	if (m_stackState < AnalysisSuccessful)
 #ifdef SECBIT
-		if (!parseAndAnalyze(isSECBIT, noSMT))
+		if (!parseAndAnalyze(_isSECBIT, _noSMT, _asERC20))
 #else
 		if (!parseAndAnalyze())
 #endif
 			return false;
 
 #ifdef SECBIT
-	if(isSECBIT) {
+	if(_isSECBIT) {
 		// Skip backend and linker.
 		m_stackState = CompilationSuccessful;
 		return true;

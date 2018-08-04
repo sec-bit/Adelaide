@@ -107,10 +107,10 @@ SMTChecker::SMTChecker(ErrorReporter& _errorReporter, ReadCallback::Callback con
 }
 
 #ifdef SECBIT
-void SMTChecker::analyze(SourceUnit const& _source, bool isSECBIT)
+void SMTChecker::analyze(SourceUnit const& _source, bool _isSECBIT)
 {
 	m_variableUsage = make_shared<VariableUsage>(_source);
-	if (_source.annotation().experimentalFeatures.count(ExperimentalFeature::SMTChecker) || isSECBIT)
+	if (_source.annotation().experimentalFeatures.count(ExperimentalFeature::SMTChecker) || _isSECBIT)
 		_source.accept(*this);
 }
 #else

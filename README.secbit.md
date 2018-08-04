@@ -59,13 +59,28 @@ $ solc --secbit-warnings output-file -o output-dir --overwrite --secbit-tag bad-
 $ solc --secbit-warnings output-file -o output-dir --overwrite --secbit-tag bad-name --secbit-tag erc20-no-return input-file
 ```
 
-To only run ERC20-specific checks, `--erc20` should be used.
+If the active checks do not contain SMT-related checks (`reentrance` and `unchecked-math`),
+SMT solver will be turned off.
+
+To reduce false positive warnings from unrelated contracts,
+the ERC20-specific checks only run on contracts satisfying the following conditions:
+* not a library, and
+* no unimplemented function, and
+* contract name or base contract names containing `erc20` or `eip20` (case insensitive)
+
+To only run ERC20-specific checks and treat more contracts as ERC20 contracts, `--erc20` should be used.
 ```
 $ solc --secbit-warnings output-file -o output-dir --overwrite --erc20 input-file
 ```
-...this effectively turns on all ERC20-specific checks.
+...this option has two effects:
+1. turns on all ERC20-specific checks (same as a list of `--secbit-tag` options)
+2. relaxes the ERC20 filter condition to:
 
-If the active checks do not contain SMT-related checks (`reentrance` and `unchecked-math`), SMT solver will be turned off.
+* not a library, and
+* no unimplemented function, and
+* contract name or base contract names containing `erc20`, `eip20`, `token`, or `coin` (case insensitive), **or**
+* containing `transfer`, `transferFrom`, and `approve` APIs
+
 
 ### Visual Studio Code Extension
 

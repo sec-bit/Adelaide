@@ -80,7 +80,10 @@ class SECBITChecker: private ASTConstVisitor
 {
 public:
 	/// @param _errorReporter provides the error logging functionality.
-	SECBITChecker(ErrorReporter& _errorReporter): m_errorReporter(_errorReporter) {}
+	SECBITChecker(
+		ErrorReporter& _errorReporter,
+		bool _asERC20
+	): m_errorReporter(_errorReporter), m_asERC20(_asERC20) {}
 
 	bool checkSyntax(ASTNode const& _astRoot);
 
@@ -132,6 +135,9 @@ private:
 
 	// Inside a if branch.
 	bool m_conditional = false;
+
+	// Treat Token/Coin contracts as ERC20 contracts.
+	bool m_asERC20 = false;
 
 	// Inside an ERC20 contract.
 	bool m_inERC20 = false;

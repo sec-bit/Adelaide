@@ -28,6 +28,8 @@
 #include <libsolidity/interface/ErrorReporter.h>
 #include <libsolidity/interface/Version.h>
 
+#include <boost/algorithm/string.hpp>
+
 using namespace std;
 using namespace dev;
 using namespace dev::solidity;
@@ -38,15 +40,79 @@ bool SECBITChecker::checkSyntax(ASTNode const& _astRoot)
 	return Error::containsOnlyWarnings(m_errorReporter.errors());
 }
 
-bool SECBITChecker::visit(ContractDefinition const& _contract)
+static bool isERC20Name(string const& _name, bool _asERC20)
 {
-	for(auto &p : _contract.baseContracts()) {
-		const auto &path = p->name().namePath();
-		if(path.back() == "ERC20Interface") {
-			m_inERC20 = true;
-			break;
+	string const lower{boost::algorithm::to_lower_copy(_name)};
+	auto contains = [&](char const* _id) {
+		return lower.find(_id) != string::npos;
+	};
+	return (contains("erc20") ||
+		contains("eip20") ||
+		// If `--erc20`, consider any name containing token/coin
+		// as an ERC20 name.
+		(_asERC20 &&
+		 (contains("token") || contains("coin"))));
+}
+
+// Logic for detecting possible ERC20 contracts.
+// If `--erc20` is not sepcified:
+//     the name of the contract or any base contract contains
+//     erc20/eip20 (case insensitive).
+// If `--erc20` is specified:
+//     the name of the contract or any base contract contains
+//     erc20/eip20/token/coin (case insensitive), or
+//     a contract with `transfer`, `transferFrom`, and `approve`.
+static bool isERC20Contract(ContractDefinition const& _contract, bool _asERC20)
+{
+	// Not for libraries.
+	if(_contract.isLibrary()) {
+		return false;
+	}
+
+	// Not for partially implemented contracts (interfaces).
+	for(auto const* fn : _contract.definedFunctions()) {
+		if(fn && !fn->isImplemented()) {
+			return false;
 		}
 	}
+
+	// Check base names.
+	for(auto &p : _contract.baseContracts()) {
+		const auto &path = p->name().namePath();
+		if(isERC20Name(path.back(), _asERC20)) {
+			return true;
+		}
+	}
+
+	// Check contract name.
+	if(isERC20Name(_contract.name(), _asERC20)) {
+		return true;
+	}
+
+	// Finally, relax to allow contracts with the three APIs.
+	if(_asERC20) {
+		bool hasTransfer = false;
+		bool hasTransferFrom = false;
+		bool hasApprove = false;
+		for(auto const* fn : _contract.definedFunctions()) {
+			if(fn) {
+				if(fn->name() == "transfer") {
+					hasTransfer = true;
+				} else if(fn->name() == "transferFrom") {
+					hasTransferFrom = true;
+				} else if(fn->name() == "approve") {
+					hasApprove = true;
+				}
+			}
+		}
+		return hasTransfer && hasTransferFrom && hasApprove;
+	}
+	return false;
+}
+
+bool SECBITChecker::visit(ContractDefinition const& _contract)
+{
+	m_inERC20 = isERC20Contract(_contract, m_asERC20);
 
 	// Skip "SafeMath". Consider all member function having revert.
 	if(_contract.name() == "SafeMath") {

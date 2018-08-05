@@ -730,59 +730,19 @@ Allowed options)",
 void CommandLineInterface::outputSECBITWarnings(
 	ScannerFromSourceNameFun _scannerFromSourceName)
 {
-	set<string> filter;
-	if(m_args.count(g_argERC20)) {
-		filter.insert("erc20-no-decimals");
-		filter.insert("erc20-no-name");
-		filter.insert("erc20-no-symbol");
-		filter.insert("erc20-no-return");
-		filter.insert("erc20-return-false");
-		filter.insert("short-addr");
-		filter.insert("transferfrom-no-allowed-check");
-		filter.insert("transfer-no-revert");
-		filter.insert("transfer-no-event");
-		filter.insert("approve-with-balance-verify");
-		filter.insert("approve-no-event");
-	}
-	if(m_args.count(g_argSECBITTag)) {
-		for(const auto &s : m_args.at(g_argSECBITTag).as<vector<string>>()) {
-			filter.insert(s);
-		}
-	}
-
 	Json::Value output(Json::objectValue);
 
-	output[g_strSECBITWarnings] = Json::Value(Json::arrayValue);
-
-	for (auto const& error: m_compiler->errors()) {
-		if(error->type() != Error::Type::SECBITWarning ||
-		   (!filter.empty() && !filter.count(error->secbitTag()))) {
-			continue;
-		}
-
-		Json::Value err(Json::objectValue);
-		err["tag"] = error->secbitTag();
-
-		SourceLocation const* location = boost::get_error_info<errinfo_sourceLocation>(*error);
-		if (location && location->sourceName) {
-			auto const& scanner = _scannerFromSourceName(*location->sourceName);
-			int startLine;
-			int startColumn;
-			int endLine;
-			int endColumn;
-			tie(startLine, startColumn) = scanner.translatePositionToLineColumn(location->start);
-			tie(endLine, endColumn) = scanner.translatePositionToLineColumn(location->end);
-			err["file"] = *location->sourceName;
-			err["startline"] = startLine + 1;
-			err["startcolumn"] = startColumn + 1;
-			err["endline"] = endLine + 1;
-			err["endcolumn"] = endColumn + 1;
-		}
-		if (string const* description = boost::get_error_info<errinfo_comment>(*error)) {
-			err["desc"] =  *description;
-		}
-		output[g_strSECBITWarnings].append(err);
+	vector<string> tags;
+	if(m_args.count(g_argSECBITTag)) {
+		tags = m_args.at(g_argSECBITTag).as<vector<string>>();
 	}
+
+	output[g_strSECBITWarnings] =
+		formatSECBITWarnings(
+			m_compiler->errors(),
+			tags,
+			m_args.count(g_argERC20),
+			_scannerFromSourceName);
 
 	string json = dev::jsonPrettyPrint(output);
 

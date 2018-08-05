@@ -23,6 +23,9 @@
 #include <libsolidity/interface/StandardCompiler.h>
 #include <libsolidity/interface/SourceReferenceFormatter.h>
 #include <libsolidity/ast/ASTJsonConverter.h>
+#ifdef SECBIT
+#include <libsolidity/parsing/Scanner.h>
+#endif
 #include <libevmasm/Instruction.h>
 #include <libdevcore/JSON.h>
 #include <libdevcore/SHA3.h>
@@ -32,6 +35,73 @@
 using namespace std;
 using namespace dev;
 using namespace dev::solidity;
+
+#ifdef SECBIT
+namespace dev
+{
+namespace solidity
+{
+Json::Value formatSECBITWarnings(
+	ErrorList const& errors,
+	vector<string> const& secbitTags,
+	bool asERC20,
+	function<Scanner const&(string const&)> const& _scannerFromSourceName)
+{
+	set<string> filter;
+	if(asERC20) {
+		filter.insert("erc20-no-decimals");
+		filter.insert("erc20-no-name");
+		filter.insert("erc20-no-symbol");
+		filter.insert("erc20-no-return");
+		filter.insert("erc20-return-false");
+		filter.insert("short-addr");
+		filter.insert("transferfrom-no-allowed-check");
+		filter.insert("transfer-no-revert");
+		filter.insert("transfer-no-event");
+		filter.insert("approve-with-balance-verify");
+		filter.insert("approve-no-event");
+	}
+
+	for(auto const& s: secbitTags) {
+		filter.insert(s);
+	}
+
+	Json::Value output(Json::arrayValue);
+
+	for (auto const& error: errors) {
+		if(error->type() != Error::Type::SECBITWarning ||
+		   (!filter.empty() && !filter.count(error->secbitTag()))) {
+			continue;
+		}
+
+		Json::Value err(Json::objectValue);
+		err["tag"] = error->secbitTag();
+
+		SourceLocation const* location = boost::get_error_info<errinfo_sourceLocation>(*error);
+		if (location && location->sourceName) {
+			auto const& scanner = _scannerFromSourceName(*location->sourceName);
+			int startLine;
+			int startColumn;
+			int endLine;
+			int endColumn;
+			tie(startLine, startColumn) = scanner.translatePositionToLineColumn(location->start);
+			tie(endLine, endColumn) = scanner.translatePositionToLineColumn(location->end);
+			err["file"] = *location->sourceName;
+			err["startline"] = startLine + 1;
+			err["startcolumn"] = startColumn + 1;
+			err["endline"] = endLine + 1;
+			err["endcolumn"] = endColumn + 1;
+		}
+		if (string const* description = boost::get_error_info<errinfo_comment>(*error)) {
+			err["desc"] =  *description;
+		}
+		output.append(err);
+	}
+	return output;
+}
+}
+}
+#endif
 
 namespace {
 

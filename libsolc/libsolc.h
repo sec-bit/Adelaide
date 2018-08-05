@@ -32,7 +32,11 @@ typedef void (*CStyleReadFileCallback)(char const* _path, char** o_contents, cha
 
 char const* license();
 char const* version();
+#ifdef SECBIT
+char const* compileJSON(char const* _input, bool _optimize, bool _isSECBIT, bool _noSMT, bool _asERC20, char const* _tags);
+#else
 char const* compileJSON(char const* _input, bool _optimize);
+#endif
 char const* compileJSONMulti(char const* _input, bool _optimize);
 char const* compileJSONCallback(char const* _input, bool _optimize, CStyleReadFileCallback _readCallback);
 char const* compileStandard(char const* _input, CStyleReadFileCallback _readCallback);

@@ -410,6 +410,16 @@ Json::Value StandardCompiler::compileInternal(Json::Value const& _input)
 	unsigned const optimizeRuns = optimizerSettings.get("runs", Json::Value(200u)).asUInt();
 	m_compilerStack.setOptimiserSettings(optimize, optimizeRuns);
 
+#ifdef SECBIT
+	Json::Value secbitSettings = settings.get("secbit", Json::Value());
+	bool isSECBIT = secbitSettings.get("enabled", Json::Value(false)).asBool();
+	bool noSMT = secbitSettings.get("noSMT", Json::Value(false)).asBool();
+	bool asERC20 = secbitSettings.get("asERC20", Json::Value(false)).asBool();
+	vector<string> secbitTags;
+	for (auto const& tag: settings.get("tags", Json::Value())) {
+		secbitTags.push_back(tag.asString());
+	}
+#endif
 	map<string, h160> libraries;
 	Json::Value jsonLibraries = settings.get("libraries", Json::Value(Json::objectValue));
 	if (!jsonLibraries.isObject())
@@ -465,6 +475,23 @@ Json::Value StandardCompiler::compileInternal(Json::Value const& _input)
 
 	try
 	{
+#ifdef SECBIT
+		m_compilerStack.compile(isSECBIT, noSMT, asERC20);
+		if(isSECBIT) {
+			// Only report SECBIT errors.
+			errors = formatSECBITWarnings(
+				m_compilerStack.errors(),
+				secbitTags,
+				asERC20,
+				scannerFromSourceName);
+			Json::Value output = Json::objectValue;
+			if (errors.size() > 0) {
+				output["errors"] = errors;
+			}
+			// Skip other output elements.
+			return output;
+		}
+#else
 		m_compilerStack.compile();
 
 		for (auto const& error: m_compilerStack.errors())
@@ -480,6 +507,7 @@ Json::Value StandardCompiler::compileInternal(Json::Value const& _input)
 				scannerFromSourceName
 			));
 		}
+#endif
 	}
 	/// This is only thrown in a very few locations.
 	catch (Error const& _error)

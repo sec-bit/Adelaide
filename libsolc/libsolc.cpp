@@ -26,6 +26,9 @@
 #include <libsolidity/interface/StandardCompiler.h>
 #include <libsolidity/interface/Version.h>
 
+#ifdef SECBIT
+#include <boost/algorithm/string.hpp>
+#endif
 #include <string>
 
 #include "license.h"
@@ -72,6 +75,10 @@ ReadCallback::Callback wrapReadCallback(CStyleReadFileCallback _readCallback = n
 	return readCallback;
 }
 
+#ifdef SECBIT
+string compile(StringMap const& _sources, bool _optimize, CStyleReadFileCallback _readCallback,
+	       bool _isSECBIT = false, bool _noSMT = false, bool _asERC20 = false, char const* _tags = nullptr)
+#else
 /// Translates a gas value as a string to a JSON number or null
 Json::Value gasToJson(Json::Value const& _value)
 {
@@ -113,6 +120,7 @@ Json::Value translateGasEstimates(Json::Value const& estimates)
 }
 
 string compile(StringMap const& _sources, bool _optimize, CStyleReadFileCallback _readCallback)
+#endif
 {
 	/// create new JSON input format
 	Json::Value input = Json::objectValue;
@@ -128,6 +136,21 @@ string compile(StringMap const& _sources, bool _optimize, CStyleReadFileCallback
 	input["settings"]["optimizer"]["enabled"] = _optimize;
 	input["settings"]["optimizer"]["runs"] = 200;
 
+#ifdef SECBIT
+	input["settings"]["secbit"] = Json::objectValue;
+	input["settings"]["secbit"]["enabled"] = _isSECBIT;
+	input["settings"]["secbit"]["noSMT"] = _noSMT;
+	input["settings"]["secbit"]["asERC20"] = _asERC20;
+	Json::Value secbitTags = Json::arrayValue;
+	if(_tags) {
+		vector<string> tags;
+		boost::split(tags, _tags, boost::is_any_of(","));
+		for (string const& tag: tags) {
+			secbitTags.append(tag);
+		}
+	}
+	input["settings"]["secbit"]["tag"] = secbitTags;
+#endif
 	// Enable all SourceUnit-level outputs.
 	input["settings"]["outputSelection"]["*"][""][0] = "*";
 	// Enable all Contract-level outputs.
@@ -172,6 +195,9 @@ string compile(StringMap const& _sources, bool _optimize, CStyleReadFileCallback
 	// }
 	Json::Value output = Json::objectValue;
 
+#ifdef SECBIT
+	output["errors"] = ret["errors"];
+#else
 	if (ret.isMember("errors"))
 	{
 		output["errors"] = Json::arrayValue;
@@ -216,6 +242,7 @@ string compile(StringMap const& _sources, bool _optimize, CStyleReadFileCallback
 				output["contracts"][sourceName + ":" + contractName] = contractOutput;
 			}
 	}
+#endif
 
 	try
 	{
@@ -250,11 +277,19 @@ string compileMulti(string const& _input, bool _optimize, CStyleReadFileCallback
 	}
 }
 
+#ifdef SECBIT
+string compileSingle(string const& _input, bool _optimize, bool _isSECBIT, bool _noSMT, bool _asERC20, char const* _tags)
+#else
 string compileSingle(string const& _input, bool _optimize)
+#endif
 {
 	StringMap sources;
 	sources[""] = _input;
+#ifdef SECBIT
+	return compile(sources, _optimize, nullptr, _isSECBIT, _noSMT, _asERC20, _tags);
+#else
 	return compile(sources, _optimize, nullptr);
+#endif
 }
 
 
@@ -279,11 +314,19 @@ extern char const* version()
 {
 	return VersionString.c_str();
 }
+#ifdef SECBIT
+extern char const* compileJSON(char const* _input, bool _optimize, bool _isSECBIT, bool _noSMT, bool _asERC20, char const* _tags)
+{
+	s_outputBuffer = compileSingle(_input, _optimize, _isSECBIT, _noSMT, _asERC20, _tags);
+	return s_outputBuffer.c_str();
+}
+#else
 extern char const* compileJSON(char const* _input, bool _optimize)
 {
 	s_outputBuffer = compileSingle(_input, _optimize);
 	return s_outputBuffer.c_str();
 }
+#endif
 extern char const* compileJSONMulti(char const* _input, bool _optimize)
 {
 	s_outputBuffer = compileMulti(_input, _optimize);

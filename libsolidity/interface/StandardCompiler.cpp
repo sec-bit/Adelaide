@@ -42,13 +42,13 @@ namespace dev
 namespace solidity
 {
 Json::Value formatSECBITWarnings(
-	ErrorList const& errors,
-	vector<string> const& secbitTags,
-	bool asERC20,
+	ErrorList const& _errors,
+	vector<string> const& _secbitTags,
+	bool _asERC20,
 	function<Scanner const&(string const&)> const& _scannerFromSourceName)
 {
 	set<string> filter;
-	if(asERC20) {
+	if(_asERC20) {
 		filter.insert("erc20-no-decimals");
 		filter.insert("erc20-no-name");
 		filter.insert("erc20-no-symbol");
@@ -62,13 +62,13 @@ Json::Value formatSECBITWarnings(
 		filter.insert("approve-no-event");
 	}
 
-	for(auto const& s: secbitTags) {
+	for(auto const& s: _secbitTags) {
 		filter.insert(s);
 	}
 
 	Json::Value output(Json::arrayValue);
 
-	for (auto const& error: errors) {
+	for (auto const& error: _errors) {
 		if(error->type() != Error::Type::SECBITWarning ||
 		   (!filter.empty() && !filter.count(error->secbitTag()))) {
 			continue;
@@ -479,15 +479,13 @@ Json::Value StandardCompiler::compileInternal(Json::Value const& _input)
 		m_compilerStack.compile(isSECBIT, noSMT, asERC20);
 		if(isSECBIT) {
 			// Only report SECBIT errors.
-			errors = formatSECBITWarnings(
+			Json::Value output = Json::objectValue;
+			output["errors"] = formatSECBITWarnings(
 				m_compilerStack.errors(),
 				secbitTags,
 				asERC20,
 				scannerFromSourceName);
-			Json::Value output = Json::objectValue;
-			if (errors.size() > 0) {
-				output["errors"] = errors;
-			}
+
 			// Skip other output elements.
 			return output;
 		}

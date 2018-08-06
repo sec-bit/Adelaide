@@ -61,9 +61,9 @@ private:
 
 #ifdef SECBIT
 Json::Value formatSECBITWarnings(
-	ErrorList const& errors,
-	std::vector<std::string> const& secbitTags,
-	bool asERC20,
+	ErrorList const& _errors,
+	std::vector<std::string> const& _secbitTags,
+	bool _asERC20,
 	std::function<Scanner const&(std::string const&)> const& _scannerFromSourceName);
 #endif
 

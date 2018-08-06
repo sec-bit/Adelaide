@@ -8,7 +8,7 @@
       "file" : "test.sol",
       "startcolumn" : 1,
       "startline" : 34,
-      "tag" : "no-decimals"
+      "tag" : "erc20-no-decimals"
     },
     {
       "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
@@ -17,7 +17,7 @@
       "file" : "test.sol",
       "startcolumn" : 1,
       "startline" : 34,
-      "tag" : "no-name"
+      "tag" : "erc20-no-name"
     },
     {
       "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
@@ -26,7 +26,7 @@
       "file" : "test.sol",
       "startcolumn" : 1,
       "startline" : 34,
-      "tag" : "no-symbol"
+      "tag" : "erc20-no-symbol"
     }
   ]
 }

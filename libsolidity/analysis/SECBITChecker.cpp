@@ -133,21 +133,21 @@ bool SECBITChecker::visit(ContractDefinition const& _contract)
 		if(names.count("decimals") == 0) {
 			m_errorReporter.secbitWarning(
 				_contract.location(),
-				"no-decimals",
+				"erc20-no-decimals",
 				"This ERC20 contract does not have a 'decimals' state "
 				"variable or a 'decimals()' function.");
 		}
 		if(names.count("name") == 0) {
 			m_errorReporter.secbitWarning(
 				_contract.location(),
-				"no-name",
+				"erc20-no-name",
 				"This ERC20 contract does not have a 'name' state "
 				"variable or a 'name()' function.");
 		}
 		if(names.count("symbol") == 0) {
 			m_errorReporter.secbitWarning(
 				_contract.location(),
-				"no-symbol",
+				"erc20-no-symbol",
 				"This ERC20 contract does not have a 'symbol' state "
 				"variable or a 'symbol()' function.");
 		}

@@ -321,8 +321,6 @@ contract CrowdsaleToken is StandardToken, Ownable {
 
     address public mintAgent;
 
-    bool public mintable;
-    
     /** Событие обновления токена (имя и символ) */
     event UpdatedTokenInformation(string newName, string newSymbol);
 
@@ -338,15 +336,13 @@ contract CrowdsaleToken is StandardToken, Ownable {
      * @param _symbol - символ токена
      * @param _decimals - кол-во знаков после запятой
      */
-    function CrowdsaleToken(string _name, string _symbol, uint _decimals, bool _mintable) {
+    function CrowdsaleToken(string _name, string _symbol, uint _decimals) {
         owner = msg.sender;
 
         name = _name;
         symbol = _symbol;
 
         decimals = _decimals;
-
-	mintable = _mintable;
     }
 
     /**
@@ -391,7 +387,7 @@ contract CrowdsaleToken is StandardToken, Ownable {
  */
 contract BurnableCrowdsaleToken is BurnableToken, CrowdsaleToken {
 
-    function BurnableCrowdsaleToken(string _name, string _symbol, uint _decimals) CrowdsaleToken(_name, _symbol, _decimals, false) BurnableToken(){
+    function BurnableCrowdsaleToken(string _name, string _symbol, uint _decimals) CrowdsaleToken(_name, _symbol, _decimals) BurnableToken(){
 
     }
 }

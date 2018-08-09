@@ -38,7 +38,45 @@ using namespace dev::solidity;
 bool SECBITChecker::checkSyntax(ASTNode const& _astRoot)
 {
 	_astRoot.accept(*this);
+	reportERC20PropertyIssues();
 	return Error::containsOnlyWarnings(m_errorReporter.errors());
+}
+
+void SECBITChecker::reportERC20PropertyIssues()
+{
+	for(auto const& p: m_ERC20Contracts) {
+		if(p.second.m_mintable) {
+			m_errorReporter.secbitWarning(
+				p.second.m_defn->location(),
+				"erc20-mintable",
+				"This ERC20 contract could be mintable.");
+		}
+		// Do not report on base contracts.
+		if(p.second.m_isBase) {
+			continue;
+		}
+		if(!p.second.m_hasDecimals) {
+			m_errorReporter.secbitWarning(
+				p.second.m_defn->location(),
+				"erc20-no-decimals",
+				"This ERC20 contract does not have a 'decimals' state "
+				"variable or a 'decimals()' function.");
+		}
+		if(!p.second.m_hasName) {
+			m_errorReporter.secbitWarning(
+			        p.second.m_defn->location(),
+				"erc20-no-name",
+				"This ERC20 contract does not have a 'name' state "
+				"variable or a 'name()' function.");
+		}
+		if(!p.second.m_hasSymbol) {
+			m_errorReporter.secbitWarning(
+				p.second.m_defn->location(),
+				"erc20-no-symbol",
+				"This ERC20 contract does not have a 'symbol' state "
+				"variable or a 'symbol()' function.");
+		}
+	}
 }
 
 static bool isERC20Name(string const& _name, bool _asERC20)
@@ -125,35 +163,40 @@ bool SECBITChecker::visit(ContractDefinition const& _contract)
 
 	if(m_inERC20) {
 		set<string> names;
+		bool mintable = false;
 		for(auto const* v: _contract.stateVariables()) {
 			names.insert(v->name());
 		}
 		for(auto const* f: _contract.definedFunctions()) {
 			names.insert(f->name());
+			static boost::regex mintName("^_?mint.*$");
+			if(boost::regex_match(f->name(), mintName)) {
+				mintable = true;
+			}
 		}
-		if(names.count("decimals") == 0) {
-			m_errorReporter.secbitWarning(
-				_contract.location(),
-				"erc20-no-decimals",
-				"This ERC20 contract does not have a 'decimals' state "
-				"variable or a 'decimals()' function.");
-		}
-		if(names.count("name") == 0) {
-			m_errorReporter.secbitWarning(
-				_contract.location(),
-				"erc20-no-name",
-				"This ERC20 contract does not have a 'name' state "
-				"variable or a 'name()' function.");
-		}
-		if(names.count("symbol") == 0) {
-			m_errorReporter.secbitWarning(
-				_contract.location(),
-				"erc20-no-symbol",
-				"This ERC20 contract does not have a 'symbol' state "
-				"variable or a 'symbol()' function.");
+		string const& name = _contract.name();
+		m_ERC20Contracts[name].m_defn = &_contract;
+		m_ERC20Contracts[name].m_hasName = names.count("name") != 0;
+		m_ERC20Contracts[name].m_hasDecimals = names.count("decimals") != 0;
+		m_ERC20Contracts[name].m_hasSymbol = names.count("symbol") != 0;
+		m_ERC20Contracts[name].m_mintable = mintable;
+
+		for(auto &p : _contract.baseContracts()) {
+			const auto &baseName = p->name().namePath().back();
+			if(m_ERC20Contracts.count(baseName) != 0) {
+				m_ERC20Contracts[name].m_hasName |=
+					m_ERC20Contracts[baseName].m_hasName;
+				m_ERC20Contracts[name].m_hasDecimals |=
+					m_ERC20Contracts[baseName].m_hasDecimals;
+				m_ERC20Contracts[name].m_hasSymbol |=
+					m_ERC20Contracts[baseName].m_hasSymbol;
+				m_ERC20Contracts[name].m_mintable |=
+					m_ERC20Contracts[baseName].m_mintable;
+				m_ERC20Contracts[baseName].m_isBase = true;
+			}
 		}
 	}
-	
+
 	return true;
 }
 
@@ -481,7 +524,7 @@ bool SECBITChecker::visit(FunctionDefinition const& _fn)
 	m_hasSenderBalanceCheck = false;
 	m_emitApproval = false;
 	m_emitTransfer = false;
-	
+
 	return true;
 }
 
@@ -489,31 +532,11 @@ void SECBITChecker::endVisit(FunctionDefinition const& _fn)
 {
 	// ERC20 functions.
 	if(m_inERC20) {
-		static boost::regex mintName("^_?mint.*$");
-		if(boost::regex_match(_fn.name(), mintName)) {
-			m_errorReporter.secbitWarning(
-				_fn.location(),
-				"erc20-mintable",
-				"This ERC20 contract has a mint function '" + _fn.name() + "'.");
-		}
-		if(_fn.isConstructor()) {
-			static boost::regex mintableName("^_?mintable.*$");
-			for(auto& p : _fn.parameterList().parameters()) {
-				if(boost::regex_match(p->name(), mintName)) {
-					m_errorReporter.secbitWarning(
-						_fn.location(),
-						"erc20-mintable",
-						"This ERC20 contract could be configured as mintable.");
-					break;
-				}
-			}
-		}
-
 		bool retBool =
 			_fn.returnParameters().size() == 1 &&
 			_fn.returnParameters().front()->type() &&
 			_fn.returnParameters().front()->type()->category() == Type::Category::Bool;
-		
+
 		if(m_returnFalse) {
 			m_errorReporter.secbitWarning(
 				_fn.location(),

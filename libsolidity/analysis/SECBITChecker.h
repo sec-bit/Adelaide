@@ -117,6 +117,9 @@ private:
 	virtual void endVisit(Return const& _id) override;
 	virtual void endVisit(EmitStatement const& _emit) override;
 
+	// Report ERC20 property-related issues.
+	void reportERC20PropertyIssues();
+
 	ErrorReporter& m_errorReporter;
 
 	// Comparison depth. > 0 means we are in a comparision expression.
@@ -156,6 +159,18 @@ private:
 	bool m_hasAllowedUnsafeSub = false;
 	// Inside a member access to length.
 	bool m_inLengthAccess = false;
+
+	// For ERC20 property checks.
+	struct ERC20Properties {
+		ContractDefinition const* m_defn = nullptr;
+	        bool m_hasName = false;
+		bool m_hasDecimals = false;
+		bool m_hasSymbol = false;
+		bool m_mintable = false;
+		bool m_isBase = false;
+	};
+	// A map from ERC20 contract names to their properties.
+	std::map<std::string, ERC20Properties> m_ERC20Contracts;
 };
 
 }

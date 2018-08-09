@@ -29,33 +29,6 @@
       "tag" : "send-vs-transfer"
     },
     {
-      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
-      "endcolumn" : 2,
-      "endline" : 101,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 89,
-      "tag" : "erc20-no-decimals"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
-      "endcolumn" : 2,
-      "endline" : 101,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 89,
-      "tag" : "erc20-no-name"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
-      "endcolumn" : 2,
-      "endline" : 101,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 89,
-      "tag" : "erc20-no-symbol"
-    },
-    {
       "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
       "endcolumn" : 3,
       "endline" : 95,
@@ -99,33 +72,6 @@
       "startcolumn" : 2,
       "startline" : 97,
       "tag" : "approve-no-event"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
-      "endcolumn" : 2,
-      "endline" : 115,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 103,
-      "tag" : "erc20-no-decimals"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
-      "endcolumn" : 2,
-      "endline" : 115,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 103,
-      "tag" : "erc20-no-name"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
-      "endcolumn" : 2,
-      "endline" : 115,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 103,
-      "tag" : "erc20-no-symbol"
     },
     {
       "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
@@ -173,33 +119,6 @@
       "tag" : "approve-no-event"
     },
     {
-      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
-      "endcolumn" : 2,
-      "endline" : 129,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 117,
-      "tag" : "erc20-no-decimals"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
-      "endcolumn" : 2,
-      "endline" : 129,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 117,
-      "tag" : "erc20-no-name"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
-      "endcolumn" : 2,
-      "endline" : 129,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 117,
-      "tag" : "erc20-no-symbol"
-    },
-    {
       "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
       "endcolumn" : 3,
       "endline" : 123,
@@ -243,33 +162,6 @@
       "startcolumn" : 2,
       "startline" : 125,
       "tag" : "approve-no-event"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
-      "endcolumn" : 2,
-      "endline" : 143,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 131,
-      "tag" : "erc20-no-decimals"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
-      "endcolumn" : 2,
-      "endline" : 143,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 131,
-      "tag" : "erc20-no-name"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
-      "endcolumn" : 2,
-      "endline" : 143,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 131,
-      "tag" : "erc20-no-symbol"
     },
     {
       "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
@@ -317,33 +209,6 @@
       "tag" : "approve-no-event"
     },
     {
-      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
-      "endcolumn" : 2,
-      "endline" : 157,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 145,
-      "tag" : "erc20-no-decimals"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
-      "endcolumn" : 2,
-      "endline" : 157,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 145,
-      "tag" : "erc20-no-name"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
-      "endcolumn" : 2,
-      "endline" : 157,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 145,
-      "tag" : "erc20-no-symbol"
-    },
-    {
       "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
       "endcolumn" : 3,
       "endline" : 151,
@@ -389,33 +254,6 @@
       "tag" : "approve-no-event"
     },
     {
-      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
-      "endcolumn" : 2,
-      "endline" : 172,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 160,
-      "tag" : "erc20-no-decimals"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
-      "endcolumn" : 2,
-      "endline" : 172,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 160,
-      "tag" : "erc20-no-name"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
-      "endcolumn" : 2,
-      "endline" : 172,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 160,
-      "tag" : "erc20-no-symbol"
-    },
-    {
       "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
       "endcolumn" : 3,
       "endline" : 166,
@@ -459,33 +297,6 @@
       "startcolumn" : 2,
       "startline" : 168,
       "tag" : "approve-no-event"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
-      "endcolumn" : 2,
-      "endline" : 189,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 175,
-      "tag" : "erc20-no-decimals"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
-      "endcolumn" : 2,
-      "endline" : 189,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 175,
-      "tag" : "erc20-no-name"
-    },
-    {
-      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
-      "endcolumn" : 2,
-      "endline" : 189,
-      "file" : "test.sol",
-      "startcolumn" : 1,
-      "startline" : 175,
-      "tag" : "erc20-no-symbol"
     },
     {
       "desc" : "This ERC20 function returns false, which may not be correctly handled by the caller.",
@@ -567,6 +378,195 @@
       "startcolumn" : 2,
       "startline" : 185,
       "tag" : "approve-no-event"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
+      "endcolumn" : 2,
+      "endline" : 101,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 89,
+      "tag" : "erc20-no-decimals"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
+      "endcolumn" : 2,
+      "endline" : 101,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 89,
+      "tag" : "erc20-no-name"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
+      "endcolumn" : 2,
+      "endline" : 101,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 89,
+      "tag" : "erc20-no-symbol"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
+      "endcolumn" : 2,
+      "endline" : 115,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 103,
+      "tag" : "erc20-no-decimals"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
+      "endcolumn" : 2,
+      "endline" : 115,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 103,
+      "tag" : "erc20-no-name"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
+      "endcolumn" : 2,
+      "endline" : 115,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 103,
+      "tag" : "erc20-no-symbol"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
+      "endcolumn" : 2,
+      "endline" : 157,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 145,
+      "tag" : "erc20-no-decimals"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
+      "endcolumn" : 2,
+      "endline" : 157,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 145,
+      "tag" : "erc20-no-name"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
+      "endcolumn" : 2,
+      "endline" : 157,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 145,
+      "tag" : "erc20-no-symbol"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
+      "endcolumn" : 2,
+      "endline" : 129,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 117,
+      "tag" : "erc20-no-decimals"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
+      "endcolumn" : 2,
+      "endline" : 129,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 117,
+      "tag" : "erc20-no-name"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
+      "endcolumn" : 2,
+      "endline" : 129,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 117,
+      "tag" : "erc20-no-symbol"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
+      "endcolumn" : 2,
+      "endline" : 143,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 131,
+      "tag" : "erc20-no-decimals"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
+      "endcolumn" : 2,
+      "endline" : 143,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 131,
+      "tag" : "erc20-no-name"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
+      "endcolumn" : 2,
+      "endline" : 143,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 131,
+      "tag" : "erc20-no-symbol"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
+      "endcolumn" : 2,
+      "endline" : 172,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 160,
+      "tag" : "erc20-no-decimals"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
+      "endcolumn" : 2,
+      "endline" : 172,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 160,
+      "tag" : "erc20-no-name"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
+      "endcolumn" : 2,
+      "endline" : 172,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 160,
+      "tag" : "erc20-no-symbol"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
+      "endcolumn" : 2,
+      "endline" : 189,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 175,
+      "tag" : "erc20-no-decimals"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
+      "endcolumn" : 2,
+      "endline" : 189,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 175,
+      "tag" : "erc20-no-name"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
+      "endcolumn" : 2,
+      "endline" : 189,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 175,
+      "tag" : "erc20-no-symbol"
     }
   ]
 }

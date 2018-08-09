@@ -1,0 +1,149 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
+      "endcolumn" : 2,
+      "endline" : 139,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 110,
+      "tag" : "erc20-no-decimals"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
+      "endcolumn" : 2,
+      "endline" : 139,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 110,
+      "tag" : "erc20-no-name"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
+      "endcolumn" : 2,
+      "endline" : 139,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 110,
+      "tag" : "erc20-no-symbol"
+    },
+    {
+      "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
+      "endcolumn" : 4,
+      "endline" : 128,
+      "file" : "test.sol",
+      "startcolumn" : 3,
+      "startline" : 120,
+      "tag" : "short-addr"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
+      "endcolumn" : 2,
+      "endline" : 238,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 159,
+      "tag" : "erc20-no-decimals"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
+      "endcolumn" : 2,
+      "endline" : 238,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 159,
+      "tag" : "erc20-no-name"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
+      "endcolumn" : 2,
+      "endline" : 238,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 159,
+      "tag" : "erc20-no-symbol"
+    },
+    {
+      "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
+      "endcolumn" : 4,
+      "endline" : 183,
+      "file" : "test.sol",
+      "startcolumn" : 3,
+      "startline" : 170,
+      "tag" : "short-addr"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
+      "endcolumn" : 2,
+      "endline" : 304,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 243,
+      "tag" : "erc20-no-decimals"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
+      "endcolumn" : 2,
+      "endline" : 304,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 243,
+      "tag" : "erc20-no-name"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
+      "endcolumn" : 2,
+      "endline" : 304,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 243,
+      "tag" : "erc20-no-symbol"
+    },
+    {
+      "desc" : "This ERC20 contract could be configured as mintable.",
+      "endcolumn" : 6,
+      "endline" : 350,
+      "file" : "test.sol",
+      "startcolumn" : 5,
+      "startline" : 341,
+      "tag" : "erc20-mintable"
+    },
+    {
+      "desc" : "This ERC20 contract has a mint function 'mintToAddress'.",
+      "endcolumn" : 6,
+      "endline" : 361,
+      "file" : "test.sol",
+      "startcolumn" : 5,
+      "startline" : 355,
+      "tag" : "erc20-mintable"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'decimals' state variable or a 'decimals()' function.",
+      "endcolumn" : 2,
+      "endline" : 397,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 392,
+      "tag" : "erc20-no-decimals"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'name' state variable or a 'name()' function.",
+      "endcolumn" : 2,
+      "endline" : 397,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 392,
+      "tag" : "erc20-no-name"
+    },
+    {
+      "desc" : "This ERC20 contract does not have a 'symbol' state variable or a 'symbol()' function.",
+      "endcolumn" : 2,
+      "endline" : 397,
+      "file" : "test.sol",
+      "startcolumn" : 1,
+      "startline" : 392,
+      "tag" : "erc20-no-symbol"
+    }
+  ]
+}

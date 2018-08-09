@@ -60,6 +60,7 @@ Json::Value formatSECBITWarnings(
 		filter.insert("transfer-no-event");
 		filter.insert("approve-with-balance-verify");
 		filter.insert("approve-no-event");
+		filter.insert("erc20-mintable");
 	}
 
 	for(auto const& s: _secbitTags) {

@@ -29,6 +29,7 @@
 #include <libsolidity/interface/Version.h>
 
 #include <boost/algorithm/string.hpp>
+#include <boost/regex.hpp>
 
 using namespace std;
 using namespace dev;
@@ -488,6 +489,26 @@ void SECBITChecker::endVisit(FunctionDefinition const& _fn)
 {
 	// ERC20 functions.
 	if(m_inERC20) {
+		static boost::regex mintName("^_?mint.*$");
+		if(boost::regex_match(_fn.name(), mintName)) {
+			m_errorReporter.secbitWarning(
+				_fn.location(),
+				"erc20-mintable",
+				"This ERC20 contract has a mint function '" + _fn.name() + "'.");
+		}
+		if(_fn.isConstructor()) {
+			static boost::regex mintableName("^_?mintable.*$");
+			for(auto& p : _fn.parameterList().parameters()) {
+				if(boost::regex_match(p->name(), mintName)) {
+					m_errorReporter.secbitWarning(
+						_fn.location(),
+						"erc20-mintable",
+						"This ERC20 contract could be configured as mintable.");
+					break;
+				}
+			}
+		}
+
 		bool retBool =
 			_fn.returnParameters().size() == 1 &&
 			_fn.returnParameters().front()->type() &&

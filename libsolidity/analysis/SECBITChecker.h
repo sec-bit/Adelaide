@@ -57,6 +57,7 @@ namespace solidity
  *  - [erc20-no-name] ERC20 contract does not have 'name'.
  *  - [erc20-no-return] ERC20 function is not returning a single boolean.
  *  - [erc20-no-symbol] ERC20 contract does not have 'symbol'.
+ *  - [erc20-mintable] mintable ERC20 contract.
  *  - [erc20-return-false] ERC20 function returns false.
  *  - [short-addr] the transfer function is vulnerable to short address attack.
  *  - [transfer-no-revert] the transfer/transferFrom function does not revert.

@@ -61,20 +61,26 @@ bool SMTChecker::checkAndUpdateReentranceState(Expression const *_expr, Reentran
 
 	if(_expr) {
 		// Find base identifier if we have _expr
-		Identifier const* identifier = asC<Identifier>(_expr);
-		if(identifier) {
-			;
-		} else if(const auto* ia = asC<IndexAccess>(_expr)) {
-			identifier = asC<Identifier>(&(ia->baseExpression()));
-		} else if(const auto* ma = asC<MemberAccess>(_expr)) {
-			identifier = asC<Identifier>(&(ma->expression()));
+		Expression const *e = _expr;
+		while(is<IndexAccess>(e) || is<MemberAccess>(e)) {
+			if(const auto* ia = asC<IndexAccess>(e)) {
+				e = &(ia->baseExpression());
+			} else if(const auto* ma = asC<MemberAccess>(e)) {
+				e = &(ma->expression());
+			}
 		}
+		Identifier const* identifier = asC<Identifier>(e);
 
 		if(!identifier) {
 			return false;
 		}
 
 		Declaration const *decl = identifier->annotation().referencedDeclaration;
+		if(auto const *varDecl = asC<VariableDeclaration>(decl)) {
+			if(!varDecl->isStateVariable()) {
+				return false;
+			}
+		}
 
 		if(!m_reentraceState.count(decl)) {
 			// First time.
@@ -110,8 +116,18 @@ SMTChecker::SMTChecker(ErrorReporter& _errorReporter, ReadCallback::Callback con
 void SMTChecker::analyze(SourceUnit const& _source, bool _isSECBIT)
 {
 	m_variableUsage = make_shared<VariableUsage>(_source);
-	if (_source.annotation().experimentalFeatures.count(ExperimentalFeature::SMTChecker) || _isSECBIT)
-		_source.accept(*this);
+	if (_source.annotation().experimentalFeatures.count(ExperimentalFeature::SMTChecker) || _isSECBIT) {
+		for (auto const &n : _source.nodes()) {
+			// Do this per-contract.
+			try {
+				n->accept(*this);
+			} catch(FatalError const &) {
+				throw;
+			} catch(...) {
+				; // SMT checker is buggy, skip other exceptions.
+			}
+		}
+	}
 }
 #else
 void SMTChecker::analyze(SourceUnit const& _source)
@@ -422,6 +438,10 @@ void SMTChecker::endVisit(UnaryOperation const& _op)
 				_op.location(),
 				"Assertion checker does not yet implement such increments / decrements."
 			);
+#ifdef SECBIT
+		// Inc/dec considered as EFFECT.
+		checkAndUpdateReentranceState(&_op.subExpression(), EFFECT);
+#endif
 		break;
 	}
 	case Token::Add: // +
@@ -434,6 +454,14 @@ void SMTChecker::endVisit(UnaryOperation const& _op)
 			checkUnderOverflow(expr(_op), *intType, _op.location());
 		break;
 	}
+#ifdef SECBIT
+	case Token::Delete: // delete
+	{
+		// Delete considered as EFFECT.
+		checkAndUpdateReentranceState(&_op.subExpression(), EFFECT);
+		break;
+	}
+#endif
 	default:
 		m_errorReporter.warning(
 			_op.location(),
@@ -488,7 +516,11 @@ void SMTChecker::endVisit(FunctionCall const& _funCall)
 	}
 	else if (funType.kind() == FunctionType::Kind::Require)
 	{
+#ifdef SECBIT
+		; // require(cond, msg) now takes two arguments as well.
+#else
 		solAssert(args.size() == 1, "");
+#endif
 		solAssert(args[0]->annotation().type->category() == Type::Category::Bool, "");
 		checkBooleanNotConstant(*args[0], "Condition is always $VALUE.");
 		addPathImpliedExpression(expr(*args[0]));
@@ -595,6 +627,7 @@ void SMTChecker::compareOperation(BinaryOperation const& _op)
 #ifdef SECBIT
 	// Comparasion, update to CHECK.
 	checkAndUpdateReentranceState(&_op.leftExpression(), CHECK);
+	checkAndUpdateReentranceState(&_op.rightExpression(), CHECK);
 #endif
 	solAssert(_op.annotation().commonType, "");
 	if (SSAVariable::isSupportedType(_op.annotation().commonType->category()))
@@ -905,6 +938,11 @@ void SMTChecker::resetVariables(vector<Declaration const*> _variables)
 {
 	for (auto const* decl: _variables)
 	{
+#ifdef SECBIT
+		if(!knownVariable(*decl)) {
+			continue;
+		}
+#endif
 		newValue(*decl);
 		setUnknownValue(*decl);
 	}
@@ -917,7 +955,13 @@ void SMTChecker::mergeVariables(vector<Declaration const*> const& _variables, sm
 	{
 		int trueCounter = _countersEndTrue.at(decl).index();
 		int falseCounter = _countersEndFalse.at(decl).index();
+#ifdef SECBIT
+		if(trueCounter != falseCounter) {
+			return;
+		}
+#else
 		solAssert(trueCounter != falseCounter, "");
+#endif
 		m_interface->addAssertion(newValue(*decl) == smt::Expression::ite(
 			_condition,
 			valueAtSequence(*decl, trueCounter),

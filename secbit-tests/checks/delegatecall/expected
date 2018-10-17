@@ -2,12 +2,30 @@
   "secbit-warnings" : 
   [
     {
+      "desc" : "No visibility specified. Defaulting to 'public'. ",
+      "endcolumn" : 3,
+      "endline" : 21,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 19,
+      "tag" : "implicit-visibility"
+    },
+    {
+      "desc" : "Function state mutability can be restricted to pure",
+      "endcolumn" : 3,
+      "endline" : 21,
+      "file" : "test.sol",
+      "startcolumn" : 2,
+      "startline" : 19,
+      "tag" : "pure-function"
+    },
+    {
       "desc" : "'delegatecall' should be used with caution because it uses the current context.",
       "endcolumn" : 39,
-      "endline" : 32,
+      "endline" : 39,
       "file" : "test.sol",
       "startcolumn" : 8,
-      "startline" : 32,
+      "startline" : 39,
       "tag" : "delegatecall"
     }
   ]

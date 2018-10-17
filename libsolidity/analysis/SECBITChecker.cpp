@@ -703,12 +703,16 @@ void SECBITChecker::endVisit(FunctionCall const& _call)
 		}
 	}
 
-	if(funType->kind() == FunctionType::Kind::DelegateCall ||
-	   funType->kind() == FunctionType::Kind::BareDelegateCall) {
-		m_errorReporter.secbitWarning(
-			_call.location(),
-			"delegatecall",
-			"'delegatecall' should be used with caution because it uses the current context.");
+	if((funType->kind() == FunctionType::Kind::DelegateCall ||
+	    funType->kind() == FunctionType::Kind::BareDelegateCall)) {
+		if(auto const* ma = asC<MemberAccess>(&_call.expression())) {
+			if(ma->memberName() == "delegatecall") {
+				m_errorReporter.secbitWarning(
+					_call.location(),
+					"delegatecall",
+					"'delegatecall' should be used with caution because it uses the current context.");
+			}
+		}
 	} else if(funType->kind() == FunctionType::Kind::Send) {
 		m_errorReporter.secbitWarning(
 			_call.location(),

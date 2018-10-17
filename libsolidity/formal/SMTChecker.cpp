@@ -497,14 +497,25 @@ void SMTChecker::endVisit(FunctionCall const& _funCall)
 		return;
 	}
 
+	FunctionType const& funType = dynamic_cast<FunctionType const&>(*_funCall.expression().annotation().type);
 #ifdef SECBIT
-	if(is<MemberAccess>(&(_funCall.expression()))) {
-		// Call to a member, assume INTERACT.
+	switch(funType.kind()) {
+	case FunctionType::Kind::External:
+	case FunctionType::Kind::CallCode:
+	case FunctionType::Kind::DelegateCall:
+	case FunctionType::Kind::BareCall:
+	case FunctionType::Kind::BareCallCode:
+	case FunctionType::Kind::BareDelegateCall:
+		// External call to a member, assume INTERACT.
 		// Reentrance check for all existing keys.
+		// This does not account for inter-procedural case
+		// where an internal callee calls externally itself.
 		checkAndUpdateReentranceState(nullptr, INTERACT);
+		break;
+	default:
+		break;
 	}
 #endif
-	FunctionType const& funType = dynamic_cast<FunctionType const&>(*_funCall.expression().annotation().type);
 
 	std::vector<ASTPointer<Expression const>> const args = _funCall.arguments();
 	if (funType.kind() == FunctionType::Kind::Assert)

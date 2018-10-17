@@ -34,5 +34,23 @@ contract Reentrance {
 		balances[msg.sender] -= _amount; // No Defect
 	}
 
+	function withdraw4(uint _amount) public {
+		if(balances[msg.sender] >= _amount) {
+			withdraw3(_amount);
+			balances[msg.sender] -= _amount; // No Defect
+		}
+	}
+
+	function callExt(uint _amount) private {
+		msg.sender.call.value(_amount)();
+	}
+
+	function withdraw5(uint _amount) public {
+		if(balances[msg.sender] >= _amount) {
+			callExt(_amount);
+			balances[msg.sender] -= _amount; // FN
+		}
+	}
+
 	function() public payable {}
 }

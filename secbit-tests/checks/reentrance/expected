@@ -20,6 +20,15 @@
       "tag" : "send-vs-transfer"
     },
     {
+      "desc" : "Calling 'call.value()' does not have 2300 gas limit, which could lead to reentrance attack. Consider using 'transfer()' instead.",
+      "endcolumn" : 33,
+      "endline" : 45,
+      "file" : "test.sol",
+      "startcolumn" : 3,
+      "startline" : 45,
+      "tag" : "send-vs-transfer"
+    },
+    {
       "desc" : "A sequence of check-interaction-effect could lead to reentrance attack. happens here for:\n  _amount = 0\n",
       "endcolumn" : 24,
       "endline" : 20,

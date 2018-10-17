@@ -18,15 +18,6 @@
       "startcolumn" : 5,
       "startline" : 25,
       "tag" : "send-vs-transfer"
-    },
-    {
-      "desc" : "A sequence of check-interaction-effect could lead to reentrance attack. happens here for:\n  currentLeader = 4\n  highestBid = 0\n",
-      "endcolumn" : 19,
-      "endline" : 13,
-      "file" : "test.sol",
-      "startcolumn" : 9,
-      "startline" : 13,
-      "tag" : "reentrance"
     }
   ]
 }

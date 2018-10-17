@@ -176,6 +176,7 @@ bool SMTChecker::visit(FunctionDefinition const& _function)
 	m_variables.insert(m_stateVariables.begin(), m_stateVariables.end());
 	m_pathConditions.clear();
 #ifdef SECBIT
+	inRequire = 0;
 	m_reentraceState.clear();
 	m_valuesToCheck.clear();
 #endif
@@ -382,6 +383,11 @@ void SMTChecker::endVisit(TupleExpression const& _tuple)
 void SMTChecker::checkUnderOverflow(smt::Expression _value, IntegerType const& _type, SourceLocation const& _location)
 {
 #ifdef SECBIT
+	if(inRequire > 0) {
+		// Skip cases in require/assert calls.
+		return;
+	}
+
 	m_valuesToCheck.push_back(make_tuple(_value, &_type, &_location));
 #else
 	checkCondition(
@@ -485,6 +491,23 @@ void SMTChecker::endVisit(BinaryOperation const& _op)
 		);
 }
 
+#ifdef SECBIT
+bool SMTChecker::visit(FunctionCall const& _funCall)
+{
+	try {
+		FunctionType const& funType = dynamic_cast<FunctionType const&>(*_funCall.expression().annotation().type);
+		switch(funType.kind()) {
+		case FunctionType::Kind::Assert:
+		case FunctionType::Kind::Require:
+			++inRequire;
+			break;
+		default:
+			break;
+		}
+	} catch(...) {}
+	return true;
+}
+#endif
 void SMTChecker::endVisit(FunctionCall const& _funCall)
 {
 	solAssert(_funCall.annotation().kind != FunctionCallKind::Unset, "");
@@ -512,6 +535,9 @@ void SMTChecker::endVisit(FunctionCall const& _funCall)
 		// where an internal callee calls externally itself.
 		checkAndUpdateReentranceState(nullptr, INTERACT);
 		break;
+	case FunctionType::Kind::Assert:
+	case FunctionType::Kind::Require:
+		--inRequire;
 	default:
 		break;
 	}

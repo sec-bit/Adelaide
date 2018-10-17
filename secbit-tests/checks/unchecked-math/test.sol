@@ -58,6 +58,7 @@ contract BinomialCoefficient {
 	    uint256 amount = uint256(cnt) * _value;
 	    require(cnt > 0 && cnt <= 20);
 	    require(_value > 0 && balances[msg.sender] >= amount);
+	    require(balances[msg.sender] + amount >= balances[msg.sender]); // No Defect.
 
 	    //balances[msg.sender] = balances[msg.sender].sub(amount);
 	    for (uint8 i = 0; i < cnt; i++) {

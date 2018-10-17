@@ -68,6 +68,9 @@ private:
 	virtual void endVisit(TupleExpression const& _node) override;
 	virtual void endVisit(UnaryOperation const& _node) override;
 	virtual void endVisit(BinaryOperation const& _node) override;
+#ifdef SECBIT
+	virtual bool visit(FunctionCall const& _node) override;
+#endif
 	virtual void endVisit(FunctionCall const& _node) override;
 	virtual void endVisit(Identifier const& _node) override;
 	virtual void endVisit(Literal const& _node) override;
@@ -195,6 +198,8 @@ public:
         // Reentrance checker state.
         enum ReentranceState { CHECK, EFFECT, INTERACT };
 private:
+	// If > 0, the current node is within a require/asset call.
+	int inRequire = 0;
 	// Map from variable to reentrance state.
 	std::map<Declaration const*, std::vector<ReentranceState>> m_reentraceState;
 	// Update states and call checkCondition at CHECK-INTERACT-EFFECT.

@@ -538,6 +538,7 @@ void SMTChecker::endVisit(FunctionCall const& _funCall)
 	case FunctionType::Kind::Assert:
 	case FunctionType::Kind::Require:
 		--inRequire;
+		break;
 	default:
 		break;
 	}

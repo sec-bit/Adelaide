@@ -37,6 +37,10 @@ using namespace dev::solidity;
 
 bool SECBITChecker::checkSyntax(ASTNode const& _astRoot)
 {
+	// Add parent annotations.
+	ParentAnnotator parentAnnotator;
+	parentAnnotator.annotateParent(_astRoot);
+
 	_astRoot.accept(*this);
 	reportERC20PropertyIssues();
 	return Error::containsOnlyWarnings(m_errorReporter.errors());
@@ -695,6 +699,15 @@ void SECBITChecker::endVisit(FunctionCall const& _call)
 		return;
 	}
 
+	if(!funType->returnParameterTypes().empty()) {
+		if(is<ExpressionStatement>(_call.annotation().parent)) {
+			m_errorReporter.secbitWarning(
+				_call.location(),
+				"unused-return-value",
+				"The return value of this call is not used.");
+		}
+	}
+
 	if(auto const* id = asC<Identifier>(&_call.expression())) {
 		if(id->name() == "Approval") {
 			m_emitApproval = true;
@@ -826,4 +839,24 @@ bool SECBITChecker::visit(Block const& _block)
 	}
 	return false;
 }
+
+bool ParentAnnotator::annotateParent(ASTNode const& _astRoot)
+{
+	m_currentParent = &_astRoot;
+	_astRoot.accept(*this);
+	return true;
+}
+
+bool ParentAnnotator::visitNode(ASTNode const& _n)
+{
+	_n.annotation().parent = m_currentParent;
+	m_currentParent = &_n;
+	return true;
+}
+
+void ParentAnnotator::endVisitNode(ASTNode const& _n)
+{
+	m_currentParent = _n.annotation().parent;
+}
+
 #endif

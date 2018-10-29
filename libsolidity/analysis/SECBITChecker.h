@@ -51,6 +51,7 @@ namespace solidity
  *  - [send-vs-transfer] using send instead of transfer.
  *  - [timestamp] using 'now' in a condition.
  *  - [tx-origin] using 'tx.origin' in a condition.
+ *  - [unused-return-value] return value not used.
  *
  * The follow ERC20-specific issues are also checked:
  *  - [erc20-no-decimals] ERC20 contract does not have 'decimals'.
@@ -171,6 +172,19 @@ private:
 	};
 	// A map from ERC20 contract names to their properties.
 	std::map<std::string, ERC20Properties> m_ERC20Contracts;
+};
+
+class ParentAnnotator: private ASTConstVisitor
+{
+public:
+	ParentAnnotator(){}
+
+	bool annotateParent(ASTNode const& _astRoot);
+private:
+	virtual bool visitNode(ASTNode const& _n) override;
+	virtual void endVisitNode(ASTNode const& _n) override;
+private:
+	ASTNode const* m_currentParent = nullptr;
 };
 
 }

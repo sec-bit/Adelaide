@@ -11,6 +11,15 @@
       "tag" : "pull-vs-push"
     },
     {
+      "desc" : "The return value of this call is not used.",
+      "endcolumn" : 35,
+      "endline" : 25,
+      "file" : "test.sol",
+      "startcolumn" : 5,
+      "startline" : 25,
+      "tag" : "unused-return-value"
+    },
+    {
       "desc" : "Calling 'call.value()' does not have 2300 gas limit, which could lead to reentrance attack. Consider using 'transfer()' instead.",
       "endcolumn" : 35,
       "endline" : 25,

@@ -11,6 +11,15 @@
       "tag" : "blockhash"
     },
     {
+      "desc" : "The return value of this call is not used.",
+      "endcolumn" : 36,
+      "endline" : 5,
+      "file" : "test.sol",
+      "startcolumn" : 3,
+      "startline" : 5,
+      "tag" : "unused-return-value"
+    },
+    {
       "desc" : "Return value of 'blockhash()' could be controled by miners.",
       "endcolumn" : 36,
       "endline" : 5,
@@ -18,6 +27,15 @@
       "startcolumn" : 3,
       "startline" : 5,
       "tag" : "blockhash"
+    },
+    {
+      "desc" : "The return value of this call is not used.",
+      "endcolumn" : 30,
+      "endline" : 6,
+      "file" : "test.sol",
+      "startcolumn" : 3,
+      "startline" : 6,
+      "tag" : "unused-return-value"
     },
     {
       "desc" : "Return value of 'blockhash()' could be controled by miners.",

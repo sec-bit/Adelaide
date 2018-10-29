@@ -27,6 +27,15 @@
       "startcolumn" : 8,
       "startline" : 39,
       "tag" : "delegatecall"
+    },
+    {
+      "desc" : "The return value of this call is not used.",
+      "endcolumn" : 11,
+      "endline" : 44,
+      "file" : "test.sol",
+      "startcolumn" : 5,
+      "startline" : 44,
+      "tag" : "unused-return-value"
     }
   ]
 }

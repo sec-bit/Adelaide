@@ -41,6 +41,9 @@ using TypePointer = std::shared_ptr<Type const>;
 struct ASTAnnotation
 {
 	virtual ~ASTAnnotation() {}
+#ifdef SECBIT
+	ASTNode const* parent = nullptr;
+#endif
 };
 
 struct DocTag

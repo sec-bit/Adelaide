@@ -20,6 +20,15 @@
       "tag" : "revert-vs-require"
     },
     {
+      "desc" : "The return value of this call is not used.",
+      "endcolumn" : 27,
+      "endline" : 8,
+      "file" : "test.sol",
+      "startcolumn" : 3,
+      "startline" : 8,
+      "tag" : "unused-return-value"
+    },
+    {
       "desc" : "Calling 'call.value()' does not have 2300 gas limit, which could lead to reentrance attack. Consider using 'transfer()' instead.",
       "endcolumn" : 27,
       "endline" : 8,

@@ -56,6 +56,15 @@
       "tag" : "transfer-no-event"
     },
     {
+      "desc" : "The return value of this call is not used.",
+      "endcolumn" : 40,
+      "endline" : 102,
+      "file" : "test.sol",
+      "startcolumn" : 3,
+      "startline" : 102,
+      "tag" : "unused-return-value"
+    },
+    {
       "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
       "endcolumn" : 3,
       "endline" : 104,

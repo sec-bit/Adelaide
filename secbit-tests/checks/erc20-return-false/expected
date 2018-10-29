@@ -101,6 +101,15 @@
       "tag" : "transfer-no-event"
     },
     {
+      "desc" : "The return value of this call is not used.",
+      "endcolumn" : 35,
+      "endline" : 69,
+      "file" : "test.sol",
+      "startcolumn" : 3,
+      "startline" : 69,
+      "tag" : "unused-return-value"
+    },
+    {
       "desc" : "Missing check on 'msg.data.length' could lead to short-address attack in this ERC20 transfer function.",
       "endcolumn" : 3,
       "endline" : 71,

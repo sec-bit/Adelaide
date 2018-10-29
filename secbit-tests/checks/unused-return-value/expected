@@ -1,0 +1,14 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "The return value of this call is not used.",
+      "endcolumn" : 14,
+      "endline" : 8,
+      "file" : "test.sol",
+      "startcolumn" : 6,
+      "startline" : 8,
+      "tag" : "unused-return-value"
+    }
+  ]
+}

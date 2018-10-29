@@ -29,6 +29,15 @@
       "tag" : "send-vs-transfer"
     },
     {
+      "desc" : "The return value of this call is not used.",
+      "endcolumn" : 35,
+      "endline" : 45,
+      "file" : "test.sol",
+      "startcolumn" : 3,
+      "startline" : 45,
+      "tag" : "unused-return-value"
+    },
+    {
       "desc" : "A sequence of check-interaction-effect could lead to reentrance attack. happens here for:\n  _amount = 0\n",
       "endcolumn" : 24,
       "endline" : 20,

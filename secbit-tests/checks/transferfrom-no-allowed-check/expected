@@ -4,74 +4,20 @@
     {
       "desc" : "No requirement on 'allowed' could make this function incompatible with an ERC20 'transferFrom'.",
       "endcolumn" : 3,
-      "endline" : 46,
+      "endline" : 47,
       "file" : "test.sol",
       "startcolumn" : 2,
       "startline" : 42,
       "tag" : "transferfrom-no-allowed-check"
-    },
-    {
-      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
-      "endcolumn" : 3,
-      "endline" : 46,
-      "file" : "test.sol",
-      "startcolumn" : 2,
-      "startline" : 42,
-      "tag" : "transfer-no-event"
     },
     {
       "desc" : "No requirement on 'allowed' could make this function incompatible with an ERC20 'transferFrom'.",
       "endcolumn" : 3,
-      "endline" : 60,
+      "endline" : 62,
       "file" : "test.sol",
       "startcolumn" : 2,
-      "startline" : 56,
+      "startline" : 57,
       "tag" : "transferfrom-no-allowed-check"
-    },
-    {
-      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
-      "endcolumn" : 3,
-      "endline" : 60,
-      "file" : "test.sol",
-      "startcolumn" : 2,
-      "startline" : 56,
-      "tag" : "transfer-no-event"
-    },
-    {
-      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
-      "endcolumn" : 3,
-      "endline" : 73,
-      "file" : "test.sol",
-      "startcolumn" : 2,
-      "startline" : 70,
-      "tag" : "transfer-no-event"
-    },
-    {
-      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
-      "endcolumn" : 3,
-      "endline" : 88,
-      "file" : "test.sol",
-      "startcolumn" : 2,
-      "startline" : 83,
-      "tag" : "transfer-no-event"
-    },
-    {
-      "desc" : "The return value of this call is not used.",
-      "endcolumn" : 40,
-      "endline" : 102,
-      "file" : "test.sol",
-      "startcolumn" : 3,
-      "startline" : 102,
-      "tag" : "unused-return-value"
-    },
-    {
-      "desc" : "This transfer function does not emit 'Transfer' event, which is incompatible with an ERC20.",
-      "endcolumn" : 3,
-      "endline" : 104,
-      "file" : "test.sol",
-      "startcolumn" : 2,
-      "startline" : 100,
-      "tag" : "transfer-no-event"
     }
   ]
 }

@@ -111,6 +111,7 @@ private:
 	virtual void endVisit(Assignment const& _assign) override;
 	virtual void endVisit(Literal const& _literal) override;
 	virtual void endVisit(VariableDeclaration const& _decl) override;
+	virtual void endVisit(VariableDeclarationStatement const& _decl) override;
 	virtual void endVisit(PragmaDirective const& _pragma) override;
 	virtual void endVisit(EventDefinition const& _event) override;
 	virtual void endVisit(FunctionCall const& _call) override;
@@ -120,6 +121,13 @@ private:
 
 	// Report ERC20 property-related issues.
 	void reportERC20PropertyIssues();
+
+	// Return true if the argument matches `allowed[x][y]` or
+	// an Identifier referencing a decl in m_allowedVars.
+	bool isAllowed(Expression const&);
+
+	// Matches a check of `allowed[x][y]`
+	bool isAllowedCheck(BinaryOperation const* /*non-null*/_bin);
 
 	ErrorReporter& m_errorReporter;
 
@@ -150,6 +158,8 @@ private:
 	bool m_hasMsgDataCheck = false;
 	// Has assert/require like `require(tokens < balances[msg.sender])`.
 	bool m_hasSenderBalanceCheck = false;
+	// The set of variables initialized with allowed[x][y].
+	std::set<Declaration const *> m_allowedVars;
 	// Has assert/require like `require(allowed[x][y] >= ...)`.
 	bool m_hasAllowedCheck = false;
 	// Emits Approval.

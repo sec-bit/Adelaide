@@ -228,6 +228,42 @@ void SECBITChecker::endVisit(Literal const& _literal)
 	}
 }
 
+bool SECBITChecker::isAllowed(Expression const& _expr)
+{
+	if(auto const *id = asC<Identifier>(&_expr)) {
+		if(m_allowedVars.count(id->annotation().referencedDeclaration) > 0) {
+			return true;
+		}
+	}
+
+	auto const* ia = asC<IndexAccess>(&_expr);
+	if(!ia) {
+		return false;
+	}
+	auto const* iaInner = asC<IndexAccess>(&ia->baseExpression());
+	if(!iaInner) {
+		return false;
+	}
+        auto const* id = asC<Identifier>(&iaInner->baseExpression());
+	if(!id) {
+		return false;
+	}
+	return id->name() == "allowed";
+}
+
+void SECBITChecker::endVisit(VariableDeclarationStatement const& _decl)
+{
+	if(_decl.declarations().size() == 0) {
+		return;
+	}
+
+	// Matches allowance = allowed[x][y] and record the decl.
+	auto varDecl = _decl.declarations().front();
+	if(varDecl->isLocalOrReturn() && isAllowed(*_decl.initialValue())) {
+		m_allowedVars.insert(varDecl.get());
+	}
+}
+
 void SECBITChecker::endVisit(VariableDeclaration const& _decl)
 {
 	if (_decl.visibility() == Declaration::Visibility::Private) {
@@ -368,26 +404,7 @@ static bool isSenderBalanceCheck(BinaryOperation const* /*non-null*/_bin)
 		isSenderBalance(_bin->leftExpression()));
 }
 
-// Matches `allowed[x][y]`
-static bool isAllowed(Expression const& _expr)
-{
-	auto const* ia = asC<IndexAccess>(&_expr);
-	if(!ia) {
-		return false;
-	}
-	auto const* iaInner = asC<IndexAccess>(&ia->baseExpression());
-	if(!iaInner) {
-		return false;
-	}
-        auto const* id = asC<Identifier>(&iaInner->baseExpression());
-	if(!id) {
-		return false;
-	}
-	return id->name() == "allowed";
-}
-
-// Matches a check of `allowed[x][y]`
-static bool isAllowedCheck(BinaryOperation const* /*non-null*/_bin)
+bool SECBITChecker::isAllowedCheck(BinaryOperation const* /*non-null*/_bin)
 {
 	// < or <= allowed[x][y]
 	return (((_bin->getOperator() == Token::LessThan) ||
@@ -528,6 +545,8 @@ bool SECBITChecker::visit(FunctionDefinition const& _fn)
 	m_hasSenderBalanceCheck = false;
 	m_emitApproval = false;
 	m_emitTransfer = false;
+
+	m_allowedVars.clear();
 
 	return true;
 }

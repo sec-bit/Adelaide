@@ -647,7 +647,10 @@ void SMTChecker::arithmeticOperation(BinaryOperation const& _op)
 			m_interface->addAssertion(right != 0);
 		}
 
-		checkUnderOverflow(value, intType, _op.location());
+		const auto* ma = asC<MemberAccess>(&_op.leftExpression());
+		if(!ma || ma->memberName() != "length") {
+			checkUnderOverflow(value, intType, _op.location());
+		}
 
 		defineExpr(_op, value);
 		break;

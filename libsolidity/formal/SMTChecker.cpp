@@ -142,7 +142,7 @@ bool SMTChecker::visit(ContractDefinition const& _contract)
 {
 #ifdef SECBIT
 	// XXX: it is probably not a good idea to report overflow/div-by-0 FPs in SafeMath.
-	if(_contract.name() == "SafeMath") {
+	if(_contract.name().compare(0, 8, "SafeMath") == 0) {
 		return false;
 	}
 #endif

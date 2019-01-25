@@ -25,7 +25,7 @@
 #include <libsolidity/ast/AST.h>
 #include <libsolidity/ast/ExperimentalFeatures.h>
 #include <libsolidity/analysis/SemVerHandler.h>
-#include <libsolidity/interface/ErrorReporter.h>
+#include <liblangutil/ErrorReporter.h>
 #include <libsolidity/interface/Version.h>
 
 #include <boost/algorithm/string.hpp>
@@ -33,6 +33,7 @@
 
 using namespace std;
 using namespace dev;
+using namespace langutil;
 using namespace dev::solidity;
 
 bool SECBITChecker::checkSyntax(ASTNode const& _astRoot)
@@ -218,13 +219,11 @@ void SECBITChecker::endVisit(Literal const& _literal)
 		return;
 	}
 
-	if(IntegerType const* it = asC<IntegerType>(type.get())) {
-		if(it->isAddress()) {
-			m_errorReporter.secbitWarning(
-				_literal.location(),
-				"hardcode-addr",
-				"Hard-coded address should be checked.");
-		}
+	if(is<AddressType>(type.get())) {
+		m_errorReporter.secbitWarning(
+			_literal.location(),
+			"hardcode-addr",
+			"Hard-coded address should be checked.");
 	}
 }
 
@@ -425,7 +424,7 @@ void SECBITChecker::endVisit(Assignment const& _assign)
 
 bool SECBITChecker::visit(BinaryOperation const& _bin)
 {
-	if(Token::isCompareOp(_bin.getOperator())) {
+	if(TokenTraits::isCompareOp(_bin.getOperator())) {
 		m_comparisonDepth ++;
 
 		// allowed is compared.
@@ -458,7 +457,7 @@ void SECBITChecker::endVisit(BinaryOperation const& _bin)
 				"Integer division should be used with caution.");
 		}
 	}
-	if(Token::isCompareOp(_bin.getOperator())) {
+	if(TokenTraits::isCompareOp(_bin.getOperator())) {
 		m_comparisonDepth --;
 	}
 
@@ -703,8 +702,8 @@ static bool isAddressAccess(Expression const& _expr, string const& _member)
 		return false;
 	}
 
-	auto const* i = asC<IntegerType>(ma->expression().annotation().type.get());
-	if(i && i->isAddress() && ma->memberName() == _member) {
+	if(is<AddressType>(ma->expression().annotation().type.get())
+	   && ma->memberName() == _member) {
 		return true;
 	}
 

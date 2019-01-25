@@ -22,20 +22,25 @@
 
 #pragma once
 
-#include <map>
-#include <list>
-#include <boost/noncopyable.hpp>
 #include <libsolidity/analysis/DeclarationContainer.h>
 #include <libsolidity/analysis/ReferencesResolver.h>
-#include <libsolidity/ast/ASTVisitor.h>
 #include <libsolidity/ast/ASTAnnotations.h>
+#include <libsolidity/ast/ASTVisitor.h>
+
+#include <boost/noncopyable.hpp>
+
+#include <list>
+#include <map>
+
+namespace langutil
+{
+class ErrorReporter;
+}
 
 namespace dev
 {
 namespace solidity
 {
-
-class ErrorReporter;
 
 /**
  * Resolves name references, typenames and sets the (explicitly given) types for all variable
@@ -50,7 +55,7 @@ public:
 	NameAndTypeResolver(
 		std::vector<Declaration const*> const& _globals,
 		std::map<ASTNode const*, std::shared_ptr<DeclarationContainer>>& _scopes,
-		ErrorReporter& _errorReporter
+		langutil::ErrorReporter& _errorReporter
 	);
 	/// Registers all declarations found in the AST node, usually a source unit.
 	/// @returns false in case of error.
@@ -69,7 +74,7 @@ public:
 	/// that create their own scope.
 	/// @returns false in case of error.
 	bool updateDeclaration(Declaration const& _declaration);
-	/// Activates a previously inactive (invisible) variable. To be used in C99 scpoing for
+	/// Activates a previously inactive (invisible) variable. To be used in C99 scoping for
 	/// VariableDeclarationStatements.
 	void activateVariable(std::string const& _name);
 
@@ -125,7 +130,7 @@ private:
 	std::map<ASTNode const*, std::shared_ptr<DeclarationContainer>>& m_scopes;
 
 	DeclarationContainer* m_currentScope = nullptr;
-	ErrorReporter& m_errorReporter;
+	langutil::ErrorReporter& m_errorReporter;
 };
 
 /**
@@ -142,8 +147,7 @@ public:
 	DeclarationRegistrationHelper(
 		std::map<ASTNode const*, std::shared_ptr<DeclarationContainer>>& _scopes,
 		ASTNode& _astRoot,
-		bool _useC99Scoping,
-		ErrorReporter& _errorReporter,
+		langutil::ErrorReporter& _errorReporter,
 		ASTNode const* _currentScope = nullptr
 	);
 
@@ -151,10 +155,10 @@ public:
 		DeclarationContainer& _container,
 		Declaration const& _declaration,
 		std::string const* _name,
-		SourceLocation const* _errorLocation,
+		langutil::SourceLocation const* _errorLocation,
 		bool _warnOnShadow,
 		bool _inactive,
-		ErrorReporter& _errorReporter
+		langutil::ErrorReporter& _errorReporter
 	);
 
 private:
@@ -172,6 +176,8 @@ private:
 	void endVisit(FunctionDefinition& _function) override;
 	bool visit(ModifierDefinition& _modifier) override;
 	void endVisit(ModifierDefinition& _modifier) override;
+	bool visit(FunctionTypeName& _funTypeName) override;
+	void endVisit(FunctionTypeName& _funTypeName) override;
 	bool visit(Block& _block) override;
 	void endVisit(Block& _block) override;
 	bool visit(ForStatement& _forLoop) override;
@@ -190,11 +196,10 @@ private:
 	/// @returns the canonical name of the current scope.
 	std::string currentCanonicalName() const;
 
-	bool m_useC99Scoping = false;
 	std::map<ASTNode const*, std::shared_ptr<DeclarationContainer>>& m_scopes;
 	ASTNode const* m_currentScope = nullptr;
 	VariableScope* m_currentFunction = nullptr;
-	ErrorReporter& m_errorReporter;
+	langutil::ErrorReporter& m_errorReporter;
 };
 
 }

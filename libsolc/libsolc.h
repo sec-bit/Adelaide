@@ -17,10 +17,18 @@
 /**
  * @author Christian <c@ethdev.com>
  * @date 2014
- * JSON interface for the solidity compiler to be used from Javascript.
+ * Public compiler API.
  */
 
+#pragma once
+
 #include <stdbool.h>
+
+#ifdef __cplusplus
+#define SOLC_NOEXCEPT noexcept
+#else
+#define SOLC_NOEXCEPT
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,16 +38,12 @@ extern "C" {
 /// heap-allocated and are free'd by the caller.
 typedef void (*CStyleReadFileCallback)(char const* _path, char** o_contents, char** o_error);
 
-char const* license();
-char const* version();
 #ifdef SECBIT
-char const* compileJSON(char const* _input, bool _optimize, bool _isSECBIT, bool _noSMT, bool _asERC20, char const* _tags);
-#else
-char const* compileJSON(char const* _input, bool _optimize);
+// bool _isSECBIT, bool _noSMT, bool _asERC20, char const* _tags);
 #endif
-char const* compileJSONMulti(char const* _input, bool _optimize);
-char const* compileJSONCallback(char const* _input, bool _optimize, CStyleReadFileCallback _readCallback);
-char const* compileStandard(char const* _input, CStyleReadFileCallback _readCallback);
+char const* solidity_license() SOLC_NOEXCEPT;
+char const* solidity_version() SOLC_NOEXCEPT;
+char const* solidity_compile(char const* _input, CStyleReadFileCallback _readCallback) SOLC_NOEXCEPT;
 
 #ifdef __cplusplus
 }

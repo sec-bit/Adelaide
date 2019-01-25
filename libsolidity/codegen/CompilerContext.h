@@ -22,28 +22,26 @@
 
 #pragma once
 
-#include <libsolidity/codegen/ABIFunctions.h>
-
-#include <libsolidity/interface/EVMVersion.h>
-
+#include <libsolidity/ast/ASTAnnotations.h>
 #include <libsolidity/ast/ASTForward.h>
 #include <libsolidity/ast/Types.h>
-#include <libsolidity/ast/ASTAnnotations.h>
+#include <libsolidity/codegen/ABIFunctions.h>
 
-#include <libevmasm/Instruction.h>
 #include <libevmasm/Assembly.h>
-
+#include <libevmasm/Instruction.h>
+#include <liblangutil/EVMVersion.h>
 #include <libdevcore/Common.h>
 
+#include <functional>
 #include <ostream>
 #include <stack>
 #include <queue>
 #include <utility>
-#include <functional>
 
 namespace dev {
 namespace solidity {
 
+class Compiler;
 
 /**
  * Context to be shared by all units that compile the same contract.
@@ -71,10 +69,15 @@ public:
 
 	void addStateVariable(VariableDeclaration const& _declaration, u256 const& _storageOffset, unsigned _byteOffset);
 	void addVariable(VariableDeclaration const& _declaration, unsigned _offsetToCurrent = 0);
-	void removeVariable(VariableDeclaration const& _declaration);
+	void removeVariable(Declaration const& _declaration);
+	/// Removes all local variables currently allocated above _stackHeight.
+	void removeVariablesAboveStackHeight(unsigned _stackHeight);
+	/// Returns the number of currently allocated local variables.
+	unsigned numberOfLocalVariables() const;
 
-	void setCompiledContracts(std::map<ContractDefinition const*, eth::Assembly const*> const& _contracts) { m_compiledContracts = _contracts; }
-	eth::Assembly const& compiledContract(ContractDefinition const& _contract) const;
+	void setOtherCompilers(std::map<ContractDefinition const*, std::shared_ptr<Compiler const>> const& _otherCompilers) { m_otherCompilers = _otherCompilers; }
+	std::shared_ptr<eth::Assembly> compiledContract(ContractDefinition const& _contract) const;
+	std::shared_ptr<eth::Assembly> compiledContractRuntime(ContractDefinition const& _contract) const;
 
 	void setStackOffset(int _offset) { m_asm->setDeposit(_offset); }
 	void adjustStackOffset(int _adjustment) { m_asm->adjustDeposit(_adjustment); }
@@ -163,7 +166,10 @@ public:
 	/// the data.
 	CompilerContext& appendConditionalRevert(bool _forwardReturnData = false);
 	/// Appends a JUMP to a specific tag
-	CompilerContext& appendJumpTo(eth::AssemblyItem const& _tag) { m_asm->appendJump(_tag); return *this; }
+	CompilerContext& appendJumpTo(
+		eth::AssemblyItem const& _tag,
+		eth::AssemblyItem::JumpType _jumpType = eth::AssemblyItem::JumpType::Ordinary
+	) { *m_asm << _tag.pushTag(); return appendJump(_jumpType); }
 	/// Appends pushing of a new tag and @returns the new tag.
 	eth::AssemblyItem pushNewTag() { return m_asm->append(m_asm->newPushTag()).tag(); }
 	/// @returns a new tag without pushing any opcodes or data
@@ -202,10 +208,12 @@ public:
 	/// Appends inline assembly (strict mode).
 	/// @a _replacements are string-matching replacements that are performed prior to parsing the inline assembly.
 	/// @param _localVariables assigns stack positions to variables with the last one being the stack top
+	/// @param _externallyUsedFunctions a set of function names that are not to be renamed or removed.
 	/// @param _system if true, this is a "system-level" assembly where all functions use named labels.
 	void appendInlineAssembly(
 		std::string const& _assembly,
 		std::vector<std::string> const& _localVariables = std::vector<std::string>(),
+		std::set<std::string> const& _externallyUsedFunctions = std::set<std::string>(),
 		bool _system = false
 	);
 
@@ -216,15 +224,15 @@ public:
 	void optimise(bool _fullOptimsation, unsigned _runs = 200) { m_asm->optimise(_fullOptimsation, m_evmVersion, true, _runs); }
 
 	/// @returns the runtime context if in creation mode and runtime context is set, nullptr otherwise.
-	CompilerContext* runtimeContext() { return m_runtimeContext; }
+	CompilerContext* runtimeContext() const { return m_runtimeContext; }
 	/// @returns the identifier of the runtime subroutine.
 	size_t runtimeSub() const { return m_runtimeSub; }
 
 	/// @returns a const reference to the underlying assembly.
 	eth::Assembly const& assembly() const { return *m_asm; }
-	/// @returns non-const reference to the underlying assembly. Should be avoided in favour of
-	/// wrappers in this class.
-	eth::Assembly& nonConstAssembly() { return *m_asm; }
+	/// @returns a shared pointer to the assembly.
+	/// Should be avoided except when adding sub-assemblies.
+	std::shared_ptr<eth::Assembly> assemblyPtr() const { return m_asm; }
 
 	/// @arg _sourceCodes is the map of input files to source code strings
 	std::string assemblyString(StringMap const& _sourceCodes = StringMap()) const
@@ -301,7 +309,7 @@ private:
 	/// Activated experimental features.
 	std::set<ExperimentalFeature> m_experimentalFeatures;
 	/// Other already compiled contracts to be used in contract creation calls.
-	std::map<ContractDefinition const*, eth::Assembly const*> m_compiledContracts;
+	std::map<ContractDefinition const*, std::shared_ptr<Compiler const>> m_otherCompilers;
 	/// Storage offsets of state variables
 	std::map<Declaration const*, std::pair<u256, unsigned>> m_stateVariables;
 	/// Offsets of local variables on the stack (relative to stack base).

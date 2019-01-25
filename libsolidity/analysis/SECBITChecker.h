@@ -83,7 +83,7 @@ class SECBITChecker: private ASTConstVisitor
 public:
 	/// @param _errorReporter provides the error logging functionality.
 	SECBITChecker(
-		ErrorReporter& _errorReporter,
+		langutil::ErrorReporter& _errorReporter,
 		bool _asERC20
 	): m_errorReporter(_errorReporter), m_asERC20(_asERC20) {}
 
@@ -129,7 +129,7 @@ private:
 	// Matches a check of `allowed[x][y]`
 	bool isAllowedCheck(BinaryOperation const* /*non-null*/_bin);
 
-	ErrorReporter& m_errorReporter;
+	langutil::ErrorReporter& m_errorReporter;
 
 	// Comparison depth. > 0 means we are in a comparision expression.
 	int m_comparisonDepth = 0;

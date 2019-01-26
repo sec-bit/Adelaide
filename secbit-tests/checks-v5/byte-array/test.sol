@@ -4,6 +4,6 @@ contract C {
     byte[] bad;
     bytes good;
     //Ignore parameter.
-    function f(byte[] bad, bytes good) public pure {
+    function f(byte[] memory bad, bytes memory good) public pure {
     }
 }

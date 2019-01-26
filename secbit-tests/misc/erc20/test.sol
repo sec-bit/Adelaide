@@ -5,7 +5,7 @@ contract Reentrance {
 
 	mapping(address => uint) public balances;
 
-	function donate(address _to) public payable {
+	function donate(address _to) external payable {
 		balances[_to] += msg.value;
 	}
 
@@ -15,7 +15,8 @@ contract Reentrance {
 
 	function withdraw(uint _amount) public {
 		if(balances[msg.sender] >= _amount) {
-			if(msg.sender.call.value(_amount)()) {
+			(bool x, bytes memory y) = msg.sender.call.value(_amount)("");
+			if(x) {
 				_amount;
 			}
 			balances[msg.sender] -= _amount; // Defect
@@ -25,7 +26,8 @@ contract Reentrance {
 	function withdraw2(uint _amount) public {
 		if(balances[msg.sender] >= _amount) {
 			balances[msg.sender] -= _amount; // No Defect
-			if(msg.sender.call.value(_amount)()) {
+			(bool x, bytes memory y) = msg.sender.call.value(_amount)("");
+			if(x) {
 				_amount;
 			}
 		}
@@ -35,7 +37,7 @@ contract Reentrance {
 		balances[msg.sender] -= _amount; // No Defect
 	}
 
-	function() public payable {}
+	function() external payable {}
 }
 
 contract ERC20Interface {

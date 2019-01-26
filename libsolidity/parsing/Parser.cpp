@@ -373,14 +373,15 @@ StateMutability Parser::parseStateMutability()
 			break;
 		case Token::Constant:
 			stateMutability = StateMutability::View;
-			parserError(
-				"The state mutability modifier \"constant\" was removed in version 0.5.0. "
-				"Use \"view\" or \"pure\" instead."
-			);
 #ifdef SECBIT
 			secbitWarning("'constant' is deprecated. "
 			   "Consider using 'view' instead.",
 			   "constant-mutability");
+#else
+			parserError(
+				"The state mutability modifier \"constant\" was removed in version 0.5.0. "
+				"Use \"view\" or \"pure\" instead."
+			);
 #endif
 			break;
 		default:

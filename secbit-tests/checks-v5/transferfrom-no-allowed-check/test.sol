@@ -42,7 +42,7 @@ contract NewContract is ERC20Interface {
 	function transferFrom(address from, address to, uint tokens) public returns (bool success) {
 		require(msg.data.length >= 2*32);
 		allowed[from][msg.sender] -= tokens;
-		Transfer(from, to, tokens);
+		emit Transfer(from, to, tokens);
 		return true;
 	}
 }
@@ -57,7 +57,7 @@ contract NewContract0 is ERC20Interface {
 	function transferFrom(address from, address to, uint tokens) public returns (bool success) {
 		require(msg.data.length >= 2*32);
 		allowed[from][msg.sender] = allowed[from][msg.sender] - tokens;
-		Transfer(from, to, tokens);
+		emit Transfer(from, to, tokens);
 		return true;
 	}
 }
@@ -71,7 +71,7 @@ contract NewContract1 is ERC20Interface {
 	// Ok.
 	function transferFrom(address from, address to, uint tokens) public returns (bool success) {
 		require(msg.data.length >= 2*32);
-		Transfer(from, to, tokens);
+		emit Transfer(from, to, tokens);
 		return true;
 	}
 }
@@ -87,7 +87,7 @@ contract NewContract2 is ERC20Interface {
 		require(msg.data.length >= 2*32);
 		require(allowed[from][msg.sender] >= tokens);
 		allowed[from][msg.sender] -= tokens;
-		Transfer(from, to, tokens);
+		emit Transfer(from, to, tokens);
 		return true;
 	}
 }
@@ -104,7 +104,7 @@ contract NewContract3 is ERC20Interface {
 	function transferFrom(address from, address to, uint tokens) public returns (bool success) {
 		require(msg.data.length >= 2*32);
 		allowed[from][msg.sender] = allowed[from][msg.sender].sub(tokens);
-		Transfer(from, to, tokens);
+		emit Transfer(from, to, tokens);
 		return true;
 	}
 }
@@ -123,7 +123,7 @@ contract NewContract4 is ERC20Interface {
 		uint x = allowed[from][msg.sender];
 		require(x >= tokens);
 		allowed[from][msg.sender] -= tokens;
-		Transfer(from, to, tokens);
+		emit Transfer(from, to, tokens);
 		return true;
 	}
 }

@@ -214,18 +214,15 @@ bool StaticAnalyzer::visit(MemberAccess const& _memberAccess)
 			);
 		else if (type->kind() == MagicType::Kind::Block && _memberAccess.memberName() == "blockhash")
 #ifdef SECBIT
-		{
-#endif
-			m_errorReporter.typeError(
-				_memberAccess.location(),
-				"\"block.blockhash()\" has been deprecated in favor of \"blockhash()\""
-			);
-#ifdef SECBIT
 			m_errorReporter.secbitWarning(
 				_memberAccess.location(),
 				"blockhash",
 				"'block.blockhash()' has been deprecated in favor of 'blockhash()'");
-		}
+#else
+			m_errorReporter.typeError(
+				_memberAccess.location(),
+				"\"block.blockhash()\" has been deprecated in favor of \"blockhash()\""
+			);
 #endif
 		else if (type->kind() == MagicType::Kind::MetaType && _memberAccess.memberName() == "runtimeCode")
 		{

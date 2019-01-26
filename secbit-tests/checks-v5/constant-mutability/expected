@@ -3,7 +3,7 @@
   [
     {
       "desc" : "'constant' is deprecated. Consider using 'view' instead.",
-      "endcolumn" : 48,
+      "endcolumn" : 56,
       "endline" : 5,
       "file" : "test.sol",
       "startcolumn" : 48,

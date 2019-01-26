@@ -2,15 +2,6 @@
   "secbit-warnings" : 
   [
     {
-      "desc" : "No visibility specified. Defaulting to 'public'. ",
-      "endcolumn" : 6,
-      "endline" : 6,
-      "file" : "test.sol",
-      "startcolumn" : 5,
-      "startline" : 3,
-      "tag" : "implicit-visibility"
-    },
-    {
       "desc" : "Function state mutability can be restricted to pure",
       "endcolumn" : 6,
       "endline" : 6,

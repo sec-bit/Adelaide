@@ -12,20 +12,20 @@
     },
     {
       "desc" : "Calling 'call.value()' does not have 2300 gas limit, which could lead to reentrance attack. Consider using 'transfer()' instead.",
-      "endcolumn" : 37,
+      "endcolumn" : 61,
       "endline" : 18,
       "file" : "test.sol",
-      "startcolumn" : 7,
+      "startcolumn" : 31,
       "startline" : 18,
       "tag" : "send-vs-transfer"
     },
     {
       "desc" : "Calling 'call.value()' does not have 2300 gas limit, which could lead to reentrance attack. Consider using 'transfer()' instead.",
-      "endcolumn" : 37,
-      "endline" : 28,
+      "endcolumn" : 61,
+      "endline" : 29,
       "file" : "test.sol",
-      "startcolumn" : 7,
-      "startline" : 28,
+      "startcolumn" : 31,
+      "startline" : 29,
       "tag" : "send-vs-transfer"
     }
   ]

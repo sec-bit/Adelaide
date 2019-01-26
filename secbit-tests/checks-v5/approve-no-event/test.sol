@@ -60,20 +60,3 @@ contract NewContract0 is ERC20Interface {
 		return true;
 	}
 }
-
-
-contract NewContract1 is ERC20Interface {
-	uint8 public decimals;
-	string public name;
-	string public symbol;
-	using SafeMath for uint;
-	mapping(address => uint) balances;
-	mapping(address => mapping (address => uint)) allowed;
-
-	// Ok.
-	function approve(address spender, uint tokens) public returns (bool success) {
-		allowed[spender][msg.sender] = tokens;
-		Approval(spender, msg.sender, tokens);
-		return true;
-	}
-}

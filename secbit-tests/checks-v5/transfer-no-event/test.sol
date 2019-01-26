@@ -71,7 +71,7 @@ contract NewContract0 is ERC20Interface {
 	// Ok.
 	function transfer(address to, uint tokens) public returns (bool success) {
 		balances[msg.sender].sub(tokens);
-		Transfer(msg.sender, to, tokens);
+		emit Transfer(msg.sender, to, tokens);
 		return true;
 	}
 }

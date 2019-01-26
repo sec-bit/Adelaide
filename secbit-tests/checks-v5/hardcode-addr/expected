@@ -9,6 +9,15 @@
       "startcolumn" : 28,
       "startline" : 5,
       "tag" : "hardcode-addr"
+    },
+    {
+      "desc" : "Hard-coded address should be checked.",
+      "endcolumn" : 70,
+      "endline" : 9,
+      "file" : "test.sol",
+      "startcolumn" : 28,
+      "startline" : 9,
+      "tag" : "hardcode-addr"
     }
   ]
 }

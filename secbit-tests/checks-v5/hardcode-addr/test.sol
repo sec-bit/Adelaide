@@ -6,7 +6,7 @@ contract C {
         return multisig;
     }
     function addr_bad_checksum() public pure returns (address) {
-        address multisig = 0x11aa000000000000000d00cc00000000000000bb;
+        address multisig = 0x11AA000000000000000d00cC00000000000000bb;
         return multisig;
     }
 }

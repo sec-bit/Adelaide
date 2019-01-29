@@ -3,47 +3,56 @@
   [
     {
       "desc" : "Calling 'call.value()' does not have 2300 gas limit, which could lead to reentrance attack. Consider using 'transfer()' instead.",
-      "endcolumn" : 37,
+      "endcolumn" : 62,
       "endline" : 17,
       "file" : "test.sol",
-      "startcolumn" : 7,
+      "startcolumn" : 32,
       "startline" : 17,
       "tag" : "send-vs-transfer"
     },
     {
       "desc" : "Calling 'call.value()' does not have 2300 gas limit, which could lead to reentrance attack. Consider using 'transfer()' instead.",
-      "endcolumn" : 37,
-      "endline" : 27,
+      "endcolumn" : 62,
+      "endline" : 28,
       "file" : "test.sol",
-      "startcolumn" : 7,
-      "startline" : 27,
+      "startcolumn" : 32,
+      "startline" : 28,
       "tag" : "send-vs-transfer"
     },
     {
       "desc" : "Calling 'call.value()' does not have 2300 gas limit, which could lead to reentrance attack. Consider using 'transfer()' instead.",
       "endcolumn" : 33,
-      "endline" : 45,
+      "endline" : 47,
       "file" : "test.sol",
       "startcolumn" : 3,
-      "startline" : 45,
+      "startline" : 47,
       "tag" : "send-vs-transfer"
     },
     {
       "desc" : "The return value of this call is not used.",
-      "endcolumn" : 35,
-      "endline" : 45,
+      "endcolumn" : 37,
+      "endline" : 47,
       "file" : "test.sol",
       "startcolumn" : 3,
-      "startline" : 45,
+      "startline" : 47,
       "tag" : "unused-return-value"
     },
     {
-      "desc" : "A sequence of check-interaction-effect could lead to reentrance attack. happens here for:\n  _amount = 0\n",
+      "desc" : "A sequence of check-interaction-effect could lead to reentrance attack. happens here",
       "endcolumn" : 24,
-      "endline" : 20,
+      "endline" : 21,
       "file" : "test.sol",
       "startcolumn" : 4,
-      "startline" : 20,
+      "startline" : 21,
+      "tag" : "reentrance"
+    },
+    {
+      "desc" : "A sequence of check-interaction-effect could lead to reentrance attack. happens here",
+      "endcolumn" : 24,
+      "endline" : 53,
+      "file" : "test.sol",
+      "startcolumn" : 4,
+      "startline" : 53,
       "tag" : "reentrance"
     }
   ]

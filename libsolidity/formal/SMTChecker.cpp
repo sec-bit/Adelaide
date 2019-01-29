@@ -1242,16 +1242,21 @@ void SMTChecker::checkCondition(
 			for (auto const& eval: sortedModel)
 				modelMessage << "  " << eval.first << " = " << eval.second << "\n";
 			m_errorReporter.warning(_location, message.str(), SecondarySourceLocation().append(modelMessage.str(), SourceLocation()).append(loopComment, SourceLocation()));
-		}
-		else
-		{
-			message << ".";
 #ifdef SECBIT
 			if(_secbitTag) {
 				m_errorReporter.secbitWarning(_location, _secbitTag, message.str());
 			}
 #endif
+		}
+		else
+		{
+			message << ".";
 			m_errorReporter.warning(_location, message.str(), SecondarySourceLocation().append(loopComment, SourceLocation()));
+#ifdef SECBIT
+			if(_secbitTag) {
+				m_errorReporter.secbitWarning(_location, _secbitTag, message.str());
+			}
+#endif
 		}
 		break;
 	}

@@ -14,7 +14,8 @@ contract Reentrance {
 
 	function withdraw(uint _amount) public {
 		if(balances[msg.sender] >= _amount) {
-			if(msg.sender.call.value(_amount)()) {
+			(bool rv, bytes memory d) = msg.sender.call.value(_amount)("");
+			if(rv) {
 				_amount;
 			}
 			balances[msg.sender] -= _amount; // Defect
@@ -24,7 +25,8 @@ contract Reentrance {
 	function withdraw2(uint _amount) public {
 		if(balances[msg.sender] >= _amount) {
 			balances[msg.sender] -= _amount; // No Defect
-			if(msg.sender.call.value(_amount)()) {
+			(bool rv, bytes memory d) = msg.sender.call.value(_amount)("");
+			if(rv) {
 				_amount;
 			}
 		}
@@ -42,7 +44,7 @@ contract Reentrance {
 	}
 
 	function callExt(uint _amount) private {
-		msg.sender.call.value(_amount)();
+		msg.sender.call.value(_amount)("");
 	}
 
 	function withdraw5(uint _amount) public {
@@ -52,5 +54,5 @@ contract Reentrance {
 		}
 	}
 
-	function() public payable {}
+	function() external payable {}
 }

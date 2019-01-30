@@ -1,0 +1,59 @@
+{
+  "secbit-warnings" : 
+  [
+    {
+      "desc" : "Integer division should be used with caution.",
+      "endcolumn" : 43,
+      "endline" : 32,
+      "file" : "test.sol",
+      "startcolumn" : 16,
+      "startline" : 32,
+      "tag" : "int-div"
+    },
+    {
+      "desc" : "Integer division should be used with caution.",
+      "endcolumn" : 62,
+      "endline" : 32,
+      "file" : "test.sol",
+      "startcolumn" : 16,
+      "startline" : 32,
+      "tag" : "int-div"
+    },
+    {
+      "desc" : "Underflow (resulting value less than 0) happens here  for:\n   = 0\n  fact = 1\n  i = (- 1)\n  k = 3\n  n = (- 1)\n  value = (- 1)\n",
+      "endcolumn" : 61,
+      "endline" : 32,
+      "file" : "test.sol",
+      "startcolumn" : 56,
+      "startline" : 32,
+      "tag" : "unchecked-math"
+    },
+    {
+      "desc" : "Underflow (resulting value less than 0) happens here  for:\n   = 1\n  fact = 1\n  i = (- 1)\n  k = 3\n  n = (- 1)\n  value = (- 1)\n",
+      "endcolumn" : 61,
+      "endline" : 32,
+      "file" : "test.sol",
+      "startcolumn" : 56,
+      "startline" : 32,
+      "tag" : "unchecked-math"
+    },
+    {
+      "desc" : "Underflow (resulting value less than 0) happens here  for:\n  fact = 1\n  i = 2\n  n = 2\n  value = (- 1)\n",
+      "endcolumn" : 22,
+      "endline" : 38,
+      "file" : "test.sol",
+      "startcolumn" : 13,
+      "startline" : 38,
+      "tag" : "unchecked-math"
+    },
+    {
+      "desc" : "Overflow (resulting value larger than 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff) happens here  for:\n  fact = 1\n  i = 2\n  n = 2\n  value = 2**256\n",
+      "endcolumn" : 22,
+      "endline" : 38,
+      "file" : "test.sol",
+      "startcolumn" : 13,
+      "startline" : 38,
+      "tag" : "unchecked-math"
+    }
+  ]
+}

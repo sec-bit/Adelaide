@@ -372,10 +372,28 @@ void SMTChecker::endVisit(Assignment const& _assignment)
 	checkAndUpdateReentranceState(&_assignment.leftHandSide(), EFFECT);
 #endif
 	if (_assignment.assignmentOperator() != Token::Assign)
+#ifdef SECBIT
+	{
+		Token op = _assignment.assignmentOperator();
+		if(op == Token::AssignMul || op == Token::AssignSub || op == Token::AssignAdd) {
+			auto const& intType = dynamic_cast<IntegerType const&>(*_assignment.annotation().type);
+			smt::Expression left(expr(_assignment.leftHandSide()));
+			smt::Expression right(expr(_assignment.rightHandSide()));
+			smt::Expression value(
+				op == Token::AssignAdd ? left + right :
+				op == Token::AssignSub ? left - right :
+				/*op == Token::AssignMul*/ left * right
+			);
+
+			checkUnderOverflow(value, intType, _assignment.location());
+		}
+	}
+#else
 		m_errorReporter.warning(
 			_assignment.location(),
 			"Assertion checker does not yet implement compound assignment."
 		);
+#endif
 	else if (!isSupportedType(_assignment.annotation().type->category()))
 		m_errorReporter.warning(
 			_assignment.location(),
@@ -423,7 +441,10 @@ void SMTChecker::checkUnderOverflow(smt::Expression _value, IntegerType const& _
 		return;
 	}
 
-	m_valuesToCheck.push_back(make_tuple(_value, &_type, &_location));
+	if(isRootFunction()) {
+		// Do not report on callee since it will cause multi-reporting.
+		m_valuesToCheck.push_back(make_tuple(_value, &_type, &_location));
+	}
 #else
 	checkCondition(
 		_value < minValue(_type),
@@ -1244,7 +1265,7 @@ void SMTChecker::checkCondition(
 			m_errorReporter.warning(_location, message.str(), SecondarySourceLocation().append(modelMessage.str(), SourceLocation()).append(loopComment, SourceLocation()));
 #ifdef SECBIT
 			if(_secbitTag) {
-				m_errorReporter.secbitWarning(_location, _secbitTag, message.str());
+				m_errorReporter.secbitWarning(_location, _secbitTag, message.str() + modelMessage.str());
 			}
 #endif
 		}

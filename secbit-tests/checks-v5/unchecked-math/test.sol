@@ -53,7 +53,7 @@ contract BinomialCoefficient {
     }
 
     mapping(address => uint256) balances;
-    function batchTransfer(address[] _receivers, uint256 _value) public view returns (bool) {
+    function batchTransfer(address[] memory _receivers, uint256 _value) public view returns (bool) {
 	    uint cnt = _receivers.length;
 	    uint256 amount = uint256(cnt) * _value;
 	    require(cnt > 0 && cnt <= 20);

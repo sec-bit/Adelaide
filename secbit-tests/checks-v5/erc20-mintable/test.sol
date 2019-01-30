@@ -10,7 +10,7 @@ contract ValidationUtil {
     }
 
     function isAddressValid(address value) internal constant returns (bool result){
-        return value != 0;
+	    return value != address(0);
     }
 }
 
@@ -62,7 +62,7 @@ contract Ownable {
    * @dev The Ownable constructor sets the original `owner` of the contract to the sender
    * account.
    */
-  function Ownable() {
+  constructor() public {
     owner = msg.sender;
   }
 
@@ -75,7 +75,7 @@ contract Ownable {
     _;
   }
 
-  function getOwner() returns(address){
+  function getOwner() public returns(address){
     return owner;
   }
 
@@ -83,9 +83,9 @@ contract Ownable {
    * @dev Allows the current owner to transfer control of the contract to a newOwner.
    * @param newOwner The address to transfer ownership to.
    */
-  function transferOwnership(address newOwner) onlyOwner {
+  function transferOwnership(address newOwner) public onlyOwner {
     require(newOwner != address(0));      
-    OwnershipTransferred(owner, newOwner);
+    emit OwnershipTransferred(owner, newOwner);
     owner = newOwner;
   }
 
@@ -98,8 +98,8 @@ contract Ownable {
  */
 contract ERC20Basic {
   uint256 public totalSupply;
-  function balanceOf(address who) constant returns (uint256);
-  function transfer(address to, uint256 value) returns (bool);
+  function balanceOf(address who) constant public returns (uint256);
+  function transfer(address to, uint256 value) public returns (bool);
   event Transfer(address indexed from, address indexed to, uint256 value);
 }
 
@@ -117,13 +117,13 @@ contract BasicToken is ERC20Basic {
   * @param _to The address to transfer to.
   * @param _value The amount to be transferred.
   */
-  function transfer(address _to, uint256 _value) returns (bool) {
+  function transfer(address _to, uint256 _value) public returns (bool) {
     require(_to != address(0));
 
     // SafeMath.sub will throw if there is not enough balance.
     balances[msg.sender] = balances[msg.sender].sub(_value);
     balances[_to] = balances[_to].add(_value);
-    Transfer(msg.sender, _to, _value);
+    emit Transfer(msg.sender, _to, _value);
     return true;
   }
 
@@ -132,7 +132,7 @@ contract BasicToken is ERC20Basic {
   * @param _owner The address to query the the balance of. 
   * @return An uint256 representing the amount owned by the passed address.
   */
-  function balanceOf(address _owner) constant returns (uint256 balance) {
+  function balanceOf(address _owner) constant public returns (uint256 balance) {
     return balances[_owner];
   }
 
@@ -143,9 +143,9 @@ contract BasicToken is ERC20Basic {
  * @dev see https://github.com/ethereum/EIPs/issues/20
  */
 contract ERC20 is ERC20Basic {
-  function allowance(address owner, address spender) constant returns (uint256);
-  function transferFrom(address from, address to, uint256 value) returns (bool);
-  function approve(address spender, uint256 value) returns (bool);
+  function allowance(address owner, address spender) constant public returns (uint256);
+  function transferFrom(address from, address to, uint256 value) public returns (bool);
+  function approve(address spender, uint256 value) public returns (bool);
   event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
@@ -167,10 +167,10 @@ contract StandardToken is ERC20, BasicToken {
    * @param _to address The address which you want to transfer to
    * @param _value uint256 the amount of tokens to be transferred
    */
-  function transferFrom(address _from, address _to, uint256 _value) returns (bool) {
+  function transferFrom(address _from, address _to, uint256 _value) public returns (bool) {
     require(_to != address(0));
 
-    var _allowance = allowed[_from][msg.sender];
+    uint256 _allowance = allowed[_from][msg.sender];
 
     // Check is not needed because sub(_allowance, _value) will already throw if this condition is not met
     // require (_value <= _allowance);
@@ -178,7 +178,7 @@ contract StandardToken is ERC20, BasicToken {
     balances[_from] = balances[_from].sub(_value);
     balances[_to] = balances[_to].add(_value);
     allowed[_from][msg.sender] = _allowance.sub(_value);
-    Transfer(_from, _to, _value);
+    emit Transfer(_from, _to, _value);
     return true;
   }
 
@@ -187,7 +187,7 @@ contract StandardToken is ERC20, BasicToken {
    * @param _spender The address which will spend the funds.
    * @param _value The amount of tokens to be spent.
    */
-  function approve(address _spender, uint256 _value) returns (bool) {
+  function approve(address _spender, uint256 _value) public returns (bool) {
 
     // To change the approve amount you first have to reduce the addresses`
     //  allowance to zero by calling `approve(_spender, 0)` if it is not
@@ -196,7 +196,7 @@ contract StandardToken is ERC20, BasicToken {
     require((_value == 0) || (allowed[msg.sender][_spender] == 0));
 
     allowed[msg.sender][_spender] = _value;
-    Approval(msg.sender, _spender, _value);
+    emit Approval(msg.sender, _spender, _value);
     return true;
   }
 
@@ -206,7 +206,7 @@ contract StandardToken is ERC20, BasicToken {
    * @param _spender address The address which will spend the funds.
    * @return A uint256 specifying the amount of tokens still available for the spender.
    */
-  function allowance(address _owner, address _spender) constant returns (uint256 remaining) {
+  function allowance(address _owner, address _spender) constant public returns (uint256 remaining) {
     return allowed[_owner][_spender];
   }
   
@@ -216,14 +216,14 @@ contract StandardToken is ERC20, BasicToken {
    * the first transaction is mined)
    * From MonolithDAO Token.sol
    */
-  function increaseApproval (address _spender, uint _addedValue) 
+  function increaseApproval (address _spender, uint _addedValue) public 
     returns (bool success) {
     allowed[msg.sender][_spender] = allowed[msg.sender][_spender].add(_addedValue);
-    Approval(msg.sender, _spender, allowed[msg.sender][_spender]);
+    emit Approval(msg.sender, _spender, allowed[msg.sender][_spender]);
     return true;
   }
 
-  function decreaseApproval (address _spender, uint _subtractedValue) 
+  function decreaseApproval (address _spender, uint _subtractedValue) public 
     returns (bool success) {
     uint oldValue = allowed[msg.sender][_spender];
     if (_subtractedValue > oldValue) {
@@ -231,7 +231,7 @@ contract StandardToken is ERC20, BasicToken {
     } else {
       allowed[msg.sender][_spender] = oldValue.sub(_subtractedValue);
     }
-    Approval(msg.sender, _spender, allowed[msg.sender][_spender]);
+    emit Approval(msg.sender, _spender, allowed[msg.sender][_spender]);
     return true;
   }
 
@@ -269,7 +269,7 @@ contract BurnableToken is StandardToken, Ownable, ValidationUtil {
         balances[_address] = balances[_address].sub(burnAmount);
 
         // Вызываем событие
-        Burned(_address, burnAmount);
+        emit Burned(_address, burnAmount);
     }
 
     /**
@@ -336,7 +336,7 @@ contract CrowdsaleToken is StandardToken, Ownable {
      * @param _symbol - символ токена
      * @param _decimals - кол-во знаков после запятой
      */
-    function CrowdsaleToken(string _name, string _symbol, uint _decimals) {
+    constructor(string memory _name, string memory _symbol, uint _decimals) public {
         owner = msg.sender;
 
         name = _name;
@@ -348,29 +348,29 @@ contract CrowdsaleToken is StandardToken, Ownable {
     /**
      * Владелец должен вызвать эту функцию, чтобы выпустить токены на адрес
      */
-    function mintToAddress(uint amount, address toAddress) onlyMintAgent{
+    function mintToAddress(uint amount, address toAddress) public onlyMintAgent{
         // перевод токенов на аккаунт
         balances[toAddress] = amount;
 
         // вызываем событие
-        TokenMinted(amount, toAddress);
+        emit TokenMinted(amount, toAddress);
     }
 
     /**
      * Владелец может обновить инфу по токену
      */
-    function setTokenInformation(string _name, string _symbol) onlyOwner {
+    function setTokenInformation(string memory _name, string memory _symbol) public onlyOwner {
         name = _name;
         symbol = _symbol;
 
         // Вызываем событие
-        UpdatedTokenInformation(name, symbol);
+        emit UpdatedTokenInformation(name, symbol);
     }
 
     /**
      * Только владелец может обновить агента для создания токенов
      */
-    function setMintAgent(address _address) onlyOwner {
+    function setMintAgent(address _address) public onlyOwner {
         mintAgent =  _address;
     }
 
@@ -387,7 +387,7 @@ contract CrowdsaleToken is StandardToken, Ownable {
  */
 contract BurnableCrowdsaleToken is BurnableToken, CrowdsaleToken {
 
-    function BurnableCrowdsaleToken(string _name, string _symbol, uint _decimals) CrowdsaleToken(_name, _symbol, _decimals) BurnableToken(){
+    constructor(string memory _name, string memory _symbol, uint _decimals) public CrowdsaleToken(_name, _symbol, _decimals) BurnableToken(){
 
     }
 }

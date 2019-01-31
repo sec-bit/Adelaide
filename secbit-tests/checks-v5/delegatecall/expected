@@ -2,15 +2,6 @@
   "secbit-warnings" : 
   [
     {
-      "desc" : "No visibility specified. Defaulting to 'public'. ",
-      "endcolumn" : 3,
-      "endline" : 21,
-      "file" : "test.sol",
-      "startcolumn" : 2,
-      "startline" : 19,
-      "tag" : "implicit-visibility"
-    },
-    {
       "desc" : "Function state mutability can be restricted to pure",
       "endcolumn" : 3,
       "endline" : 21,
@@ -21,20 +12,20 @@
     },
     {
       "desc" : "'delegatecall' should be used with caution because it uses the current context.",
-      "endcolumn" : 39,
+      "endcolumn" : 72,
       "endline" : 39,
       "file" : "test.sol",
-      "startcolumn" : 8,
+      "startcolumn" : 32,
       "startline" : 39,
       "tag" : "delegatecall"
     },
     {
       "desc" : "The return value of this call is not used.",
       "endcolumn" : 11,
-      "endline" : 44,
+      "endline" : 45,
       "file" : "test.sol",
       "startcolumn" : 5,
-      "startline" : 44,
+      "startline" : 45,
       "tag" : "unused-return-value"
     }
   ]

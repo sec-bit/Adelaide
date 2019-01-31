@@ -315,6 +315,39 @@ static bool isMemberAccess(MemberAccess const& _ma, string const& _obj, string c
 	return false;
 }
 
+// Matches address `_expr._member`.
+static bool isAddressAccess(Expression const& _expr, string const& _member)
+{
+	auto const* ma = asC<MemberAccess>(&_expr);
+	if(!ma) {
+		return false;
+	}
+
+	if(is<AddressType>(ma->expression().annotation().type.get())
+	   && ma->memberName() == _member) {
+		return true;
+	}
+
+	return false;
+}
+
+// Match if _ma is a member access `address(this).xxx`.
+static bool isThisAccess(MemberAccess const& _ma, string const& _member)
+{
+	if(!isAddressAccess(_ma, _member)) {
+		return false;
+	}
+	auto const* call = asC<FunctionCall>(&_ma.expression());
+	if(!call) {
+		return false;
+	}
+	auto const* callee = asC<ElementaryTypeNameExpression>(&call->expression());
+	if(!callee || callee->typeName().token() != Token::Address) {
+		return false;
+	}
+	return true;
+}
+
 bool SECBITChecker::visit(MemberAccess const& _ma)
 {
 	if(_ma.memberName() == "length") {
@@ -342,7 +375,7 @@ void SECBITChecker::endVisit(MemberAccess const& _ma)
 				"tx-origin",
 				"Comparing 'tx.origin' might not have the intended result.");
 		}
-		if(isMemberAccess(_ma, "this", "balance")) {
+		if(isThisAccess(_ma, "balance")) {
 			m_errorReporter.secbitWarning(
 				_ma.location(),
 				"forced-ether",
@@ -692,22 +725,6 @@ void SECBITChecker::endVisit(FunctionDefinition const& _fn)
 		m_callablesWithRevert.insert(_fn.name());
 		m_hasRevert = false;
 	}
-}
-
-// Matches address `_expr._member`.
-static bool isAddressAccess(Expression const& _expr, string const& _member)
-{
-	auto const* ma = asC<MemberAccess>(&_expr);
-	if(!ma) {
-		return false;
-	}
-
-	if(is<AddressType>(ma->expression().annotation().type.get())
-	   && ma->memberName() == _member) {
-		return true;
-	}
-
-	return false;
 }
 
 void SECBITChecker::endVisit(FunctionCall const& _call)

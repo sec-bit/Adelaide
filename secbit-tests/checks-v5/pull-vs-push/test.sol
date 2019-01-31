@@ -3,10 +3,10 @@ contract CallToTheUnknown {
   // Highest bidder becomes the Leader. 
   // Vulnerable to DoS attack by an attacker contract which reverts all transactions to it.
 
-    address currentLeader;
+    address payable currentLeader;
     uint highestBid;
 
-    function() public payable {
+    function() external payable {
         require(msg.value > highestBid);
         require(currentLeader.send(highestBid)); // Refund the old leader, if it fails then revert
         currentLeader = msg.sender;
@@ -26,7 +26,7 @@ contract Pwn {
   }
     
   // reverts anytime it receives ether, thus cancelling out the change of the leader
-  function() payable public {
+  function() external payable {
     revert();
   }
 }

@@ -3,11 +3,11 @@ pragma solidity 0.4.11;
 contract TxUserWallet {
     address owner;
 
-    function TxUserWallet() public {
+    constructor() public {
         owner = msg.sender;
     }
 
-    function transferTo(address dest, uint amount) public {
+    function transferTo(address payable dest, uint amount) public {
         require(tx.origin == owner);
 	if(tx.origin != owner){
 		dest.transfer(amount);
